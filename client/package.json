@@ -1,0 +1,61 @@
+{
+  "name": "scrum-poker-client",
+  "version": "0.0.1",
+  "description": "Scrum poker server application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server",
+    "build": "webpack --progress --colors",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xcanchal/react-microfrontends.git"
+  },
+  "keywords": [
+    "scrum",
+    "poker",
+    "planning",
+    "sprint",
+    "react",
+    "socketio"
+  ],
+  "author": "Xavier Canchal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xcanchal/react-microfrontends/issues"
+  },
+  "homepage": "https://github.com/xcanchal/react-microfrontends#readme",
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "dotenv-webpack": "^1.7.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "socket.io": "^2.3.0",
+    "styled-components": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-styled-components": "^1.10.7",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-better-styled-components": "^1.1.2",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
