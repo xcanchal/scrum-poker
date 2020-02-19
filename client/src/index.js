@@ -4,11 +4,12 @@ import 'regenerator-runtime/runtime';
 
 import React from 'react';
 import { render } from 'react-dom';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
 import App from './root/app';
 
+{/* <App io={io} />, */}
 render(
-  <App io={io} />,
+  <App />,
   document.getElementById('root'),
 );
