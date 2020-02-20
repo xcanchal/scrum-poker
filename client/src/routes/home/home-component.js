@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import { ioUrl } from '../../config';
 
 const Home = ({ className, history, io, setSocket }) => {
   const createRoom = async () => {
-    const socket = await io(`${ioUrl}`);
+    const roomId = '1234';
+    const socket = await io(`${ioUrl}?roomId=${roomId}`);
     socket.on('connect', () => {
       setSocket(socket);
-      history.push(`/room/${socket.id}`);
+      history.push(`/room/${roomId}`);
     });
   };
 

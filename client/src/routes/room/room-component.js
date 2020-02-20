@@ -15,17 +15,19 @@ const Room = ({ className, history, io, socket, setSocket }) => {
     console.log(`Guest ${id} joined`);
   };
 
+  const onGuestLeave = (id) => {
+    console.log(`Guest ${id} left`);
+  };
+
   const onGuestsUpdated = (ids) => {
     setGuests(ids);
   }
 
- /*  const onClientLeave = (id) => {
-    console.log(`Client ${id} left`);
-    const guestIndex = guests.findIndex((id) => id === guest.id);
-    const newGuests = [...guests];
-    newGuests.slice(guestIndex, 1);
-    setGuests(newGuests);
-  }; */
+  const setListeners = (socket) => {
+    socket.on('clientJoined', onGuestJoin);
+    socket.on('clientLeft', onGuestLeave);
+    socket.on('clientsUpdated', onGuestsUpdated);
+  };
 
   useEffect(() => {
     if (!roomId) {
@@ -33,10 +35,15 @@ const Room = ({ className, history, io, socket, setSocket }) => {
     }
 
     if (!socket) {
-      const socket = io(`${ioUrl}?room=${roomId}`);
-      socket.on('clientJoined', onGuestJoin);
-      socket.on('clientsUpdated', onGuestsUpdated);
-      // socket.on('clientLeft', onClientLeave);
+      socket = io(`${ioUrl}?roomId=${roomId}`);
+      setSocket(socket);
+      setListeners(socket);
+    } else {
+      setListeners(socket);
+    }
+
+    return () => {
+      socket.emit('disconnect');
     }
   }, []);
 
