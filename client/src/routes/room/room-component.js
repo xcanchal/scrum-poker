@@ -13,64 +13,39 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const [room, setRoom] = useState(existingRoom);
   const [listenersReady, setListenersReady] = useState(false);
 
-  /*  const kickGuestOut = () => {
+   const kickGuestOut = () => {
     alert('room does not exist!');
     history.push('/');
-  }; */
+  };
+
+  const addListeners = (sckt) => {
+    if (!listenersReady) {
+      sckt.on('unexistingRoom', kickGuestOut);
+      sckt.on('guestJoined', setRoom);
+      sckt.on('guestLeft', setRoom);
+      setListenersReady(true);
+    }
+  };
 
   const createSocket = async () => {
     const newSocket = await io(ioUrl);
     setSocket(newSocket);
-  };
-
-  const addListeners = () => {
-    if (!listenersReady) {
-      // socket.on('unexistingRoom', kickGuestOut);
-      socket.on('guestJoined', (room) => {
-        console.warn('GUEST JOINED', room);
-      });
-      setListenersReady(true);
-    }
+    newSocket.emit('joinRoom', { roomId, guestName: 'random' }, setRoom);
+    addListeners(newSocket);
   };
 
   useEffect(() => {
     if (!socket) {
       createSocket();
+    } else {
+      addListeners(socket);
+    }
+
+    return () => {
+      socket.emit('leaveRoom');
     }
   }, []);
 
-  useEffect(() => {
-    if (socket) {
-      if (!room.id) {
-        socket.emit('joinRoom', roomId, (room) => {
-          setRoom(room);
-          console.log('joined room', room);
-        });
-      }
-      addListeners();
-    }
-  }, [socket]);
-
-/*   useEffect(() => {
-    return () => {
-      if (socket) {
-        socket.emit('leaveRoom');
-      }
-    };
-  }); */
-
- /*  useEffect(() => {
-    if (socket) {
-      if (!room) {
-        socket.emit('joinRoom', roomId, setRoom);
-      }
-      addListeners();
-
-      return () => {
-        socket.emit('leaveRoom');
-      };
-    }
-  }, [socket]); */
 
   return (
     <div id="room-component" className={`${className}`}>
@@ -86,9 +61,9 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
           </StyledCardList>
           <p>Participants:</p>
           <ul>
-            {room.host && <li>{room.host} (host)</li>}
-            {room.guests && room.guests.map((id) => (
-              <li key={id}>{id}</li>
+            {room.host && <li>{room.host.name} (host)</li>}
+            {!!room.guests.length && room.guests.filter((guest) => guest).map(({ id, name }) => (
+              <li key={id}>{name}</li>
             ))}
           </ul>
         </Fragment>

@@ -1,34 +1,12 @@
 const uuid = require('uuid/v4');
 
-/**
- * Handle the disconnection of a client
- * @param {Object} socket socket client connection
- */
-/* const onDisconnect = (socket, io, roomId) => {
-  socket.on('disconnect', () => {
-    socket.broadcast.to(roomId).emit('clientLeft', socket.id);
-    io.sockets.emit('clientsUpdated', Object.keys(io.sockets.connected));
-  });
-}; */
-
-/**
- * Handle the connection of a client
- * @param {Object} socket socket client connection
- * @param {Object} io socket io
- */
-/* const onConnect = (socket, io) => {
-  const { roomId } = socket.handshake.query;
-  socket.join(roomId, () => {
-    socket.broadcast.to(roomId).emit('clientJoined', socket.id);
-    io.sockets.emit('clientsUpdated', Object.keys(io.sockets.connected));
-
-    // onClientLeftRoom(socket, roomId);
-    onDisconnect(socket, io, roomId);
-  });
-}; */
-
 // Initial state
-const rooms = [];
+const rooms = {};
+
+const getRoomResponse = (room) => ({
+  ...room,
+  guests: room.guests.map(({ id, name }) => ({ id, name })),
+});
 
 /**
  * Kick the guest out of all the rooms where is in
@@ -38,13 +16,14 @@ const leaveRooms = (socket) => {
   const emptyRoomIds = [];
 
   for (const [roomId, { guests }] of Object.entries(rooms)) {
-    if (guests.includes(socket.id)) {
+    const guestInRoom = guests.find(({ id }) => id === socket.id);
+    if (guestInRoom) {
       socket.leave(roomId);
       const room = rooms[roomId];
-      room.guests = room.guests.filter((guest) => guest.id === socket.id);
-      socket.broadcast.to(roomId).emit('clientLeft', socket.id);
+      room.guests = room.guests.filter(({ id }) => id !== socket.id);
+      socket.broadcast.to(roomId).emit('guestLeft', getRoomResponse(room));
 
-      if (!room.guests.length) {
+      if (![room.host, room.guests].length) {
         emptyRoomIds.push(roomId);
       }
     }
@@ -61,19 +40,24 @@ const leaveRooms = (socket) => {
  * @param {String} roomName name of the room
  * @param {Function} callback function
  */
-const joinRoom = (socket, roomId, callback) => {
+const joinRoom = (socket, { roomId, guestName }, callback) => {
   console.log('joinRoom - socket, roomId', socket.id, roomId);
   console.log(rooms);
   const room = rooms[roomId];
   if (!room) {
-    socket.broadcast.to(roomId).emit('unexistingRoom');
+    console.log('no room');
+    socket.emit('unexistingRoom');
   } else {
     socket.join(roomId, () => {
-      if (socket.id !== room.host) {
-        room.guests.push(socket.id);
+      if (socket.id !== room.host.id) {
+        room.guests.push({
+          id: socket.id,
+          name: guestName,
+          socket,
+        });
       }
-      socket.broadcast.to(roomId).emit('guestJoined', { guest: socket.id, room });
-      if (callback) callback(room);
+      socket.broadcast.to(roomId).emit('guestJoined', getRoomResponse(room));
+      if (callback) callback(getRoomResponse(room));
     });
   }
 };
@@ -84,15 +68,18 @@ const joinRoom = (socket, roomId, callback) => {
  * @param {String} roomName name of the room
  * @param {Function} callback function
  */
-const createRoom = (socket, roomName, callback) => {
+const createRoom = (socket, { hostName, roomName }, callback) => {
   const room = {
     id: uuid(),
     name: roomName,
-    host: socket.id,
+    host: {
+      id: socket.id,
+      name: hostName,
+    },
     guests: [],
   };
   rooms[room.id] = room;
-  joinRoom(socket, room.id, callback);
+  joinRoom(socket, { roomId: room.id, guestName: hostName }, callback);
   // if (callback) callback(room);
 };
 
@@ -102,9 +89,9 @@ const createRoom = (socket, roomName, callback) => {
  */
 module.exports = (io) => {
   io.on('connect', (socket) => {
-    socket.id = uuid();
-    socket.on('createRoom', (name, callback) => createRoom(socket, name, callback));
-    socket.on('joinRoom', (roomId, callback) => joinRoom(socket, roomId, callback));
+    // socket.id = uuid();
+    socket.on('createRoom', (params, callback) => createRoom(socket, params, callback));
+    socket.on('joinRoom', (params, callback) => joinRoom(socket, params, callback));
     socket.on('leaveRoom', () => leaveRooms(socket));
     socket.on('disconnect', () => leaveRooms(socket));
   });
