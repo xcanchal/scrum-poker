@@ -27,7 +27,7 @@ SocketProvider.propTypes = {
 
 SocketProvider.defaultProps = {
   io,
-  socket: null,
+  socket: {},
 };
 
 export default SocketProvider;

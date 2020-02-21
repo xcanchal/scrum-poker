@@ -3,9 +3,8 @@ import { withRouter, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { ioUrl } from '../../config';
-import { StyledCardList, StyledCardListItem } from '../../components/card-list/';
-
-const cardValues = [1, 3, 5, 8, 13, 20, 40, 100, '?', '☕'];
+import HostView from '../../components/host-view';
+import GuestView from '../../components/guest-view';
 
 const Room = ({ className, history, location, io, socket, setSocket }) => {
   const { roomId } = useParams();
@@ -35,41 +34,28 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   };
 
   useEffect(() => {
-    if (!socket) {
+    if (!socket.id) {
       createSocket();
     } else {
       addListeners(socket);
     }
-
-    /* return () => {
-      socket.emit('leaveRoom');
-    } */
   }, []);
 
+  useEffect(() => {
+    if (socket.id) {
+      return () => {
+        socket.emit('leaveRoom');
+      }
+    }
+  }, [socket]);
 
-  return (
+  console.log('socket', socket);
+
+  return socket.id && room.id ? (
     <div id="room-component" className={`${className}`}>
-      {room.name && (
-        <Fragment>
-          <p>Room: {room.name}</p>
-          <StyledCardList>
-            {cardValues.map((value) => (
-              <StyledCardListItem key={value}>
-                <span>{value}</span>
-              </StyledCardListItem>
-            ))}
-          </StyledCardList>
-          <p>Participants:</p>
-          <ul>
-            {room.host && <li>{room.host.name} (host)</li>}
-            {!!room.guests.length && room.guests.filter((guest) => guest).map(({ id, name }) => (
-              <li key={id}>{name}</li>
-            ))}
-          </ul>
-        </Fragment>
-      )}
+      {socket.id === room.host.id ? <HostView room={room} /> : <GuestView room={room} /> }
     </div>
-  );
+  ) : null;
 };
 
 Room.propTypes = {
@@ -82,7 +68,7 @@ Room.propTypes = {
 };
 
 Room.defaultProps = {
-  socket: null,
+  socket: {},
 };
 
 export default withRouter(Room);
