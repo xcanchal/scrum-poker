@@ -89,7 +89,6 @@ const createRoom = (socket, { hostName, roomName }, callback) => {
  */
 module.exports = (io) => {
   io.on('connect', (socket) => {
-    // socket.id = uuid();
     socket.on('createRoom', (params, callback) => createRoom(socket, params, callback));
     socket.on('joinRoom', (params, callback) => joinRoom(socket, params, callback));
     socket.on('leaveRoom', () => leaveRooms(socket));

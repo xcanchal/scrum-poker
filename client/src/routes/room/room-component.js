@@ -41,9 +41,9 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
       addListeners(socket);
     }
 
-    return () => {
+    /* return () => {
       socket.emit('leaveRoom');
-    }
+    } */
   }, []);
 
 
