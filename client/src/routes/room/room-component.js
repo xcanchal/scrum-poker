@@ -7,51 +7,76 @@ import { StyledCardList, StyledCardListItem } from '../../components/card-list/'
 
 const cardValues = [1, 3, 5, 8, 13, 20, 40, 100, '?', '☕'];
 
-const Room = ({ className, history, io, socket, setSocket }) => {
-  const [guests, setGuests] = useState([]);
+const Room = ({ className, history, location, io, socket, setSocket }) => {
   const { roomId } = useParams();
+  const existingRoom = location.state && location.state.room ? location.state.room : {};
+  const [room, setRoom] = useState(existingRoom);
+  const [listenersReady, setListenersReady] = useState(false);
 
-  const onGuestJoin = (id) => {
-    console.log(`Guest ${id} joined`);
+  /*  const kickGuestOut = () => {
+    alert('room does not exist!');
+    history.push('/');
+  }; */
+
+  const createSocket = async () => {
+    const newSocket = await io(ioUrl);
+    setSocket(newSocket);
   };
 
-  const onGuestLeave = (id) => {
-    console.log(`Guest ${id} left`);
-  };
-
-  const onGuestsUpdated = (ids) => {
-    setGuests(ids);
-  }
-
-  const setListeners = (socket) => {
-    socket.on('clientJoined', onGuestJoin);
-    socket.on('clientLeft', onGuestLeave);
-    socket.on('clientsUpdated', onGuestsUpdated);
+  const addListeners = () => {
+    if (!listenersReady) {
+      // socket.on('unexistingRoom', kickGuestOut);
+      socket.on('guestJoined', (room) => {
+        console.warn('GUEST JOINED', room);
+      });
+      setListenersReady(true);
+    }
   };
 
   useEffect(() => {
-    if (!roomId) {
-      history.push('/');
-    }
-
     if (!socket) {
-      socket = io(`${ioUrl}?roomId=${roomId}`);
-      setSocket(socket);
-      setListeners(socket);
-    } else {
-      setListeners(socket);
-    }
-
-    return () => {
-      socket.emit('disconnect');
+      createSocket();
     }
   }, []);
 
+  useEffect(() => {
+    if (socket) {
+      if (!room.id) {
+        socket.emit('joinRoom', roomId, (room) => {
+          setRoom(room);
+          console.log('joined room', room);
+        });
+      }
+      addListeners();
+    }
+  }, [socket]);
+
+/*   useEffect(() => {
+    return () => {
+      if (socket) {
+        socket.emit('leaveRoom');
+      }
+    };
+  }); */
+
+ /*  useEffect(() => {
+    if (socket) {
+      if (!room) {
+        socket.emit('joinRoom', roomId, setRoom);
+      }
+      addListeners();
+
+      return () => {
+        socket.emit('leaveRoom');
+      };
+    }
+  }, [socket]); */
+
   return (
     <div id="room-component" className={`${className}`}>
-      {roomId && (
+      {room.name && (
         <Fragment>
-          <p>Room: {roomId}</p>
+          <p>Room: {room.name}</p>
           <StyledCardList>
             {cardValues.map((value) => (
               <StyledCardListItem key={value}>
@@ -59,9 +84,10 @@ const Room = ({ className, history, io, socket, setSocket }) => {
               </StyledCardListItem>
             ))}
           </StyledCardList>
-          <p>Guests:</p>
+          <p>Participants:</p>
           <ul>
-            {guests.map((id) => (
+            {room.host && <li>{room.host} (host)</li>}
+            {room.guests && room.guests.map((id) => (
               <li key={id}>{id}</li>
             ))}
           </ul>
@@ -74,6 +100,7 @@ const Room = ({ className, history, io, socket, setSocket }) => {
 Room.propTypes = {
   className: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   io: PropTypes.func.isRequired,
   socket: PropTypes.object,
   setSocket: PropTypes.func.isRequired,

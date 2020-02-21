@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { ioUrl } from '../../config';
 
 const Home = ({ className, history, io, setSocket }) => {
+  const [roomName, setRoomName] = useState('');
+
+  const onNameChange = ({ target: { value }}) => {
+    setRoomName(value);
+  };
+
   const createRoom = async () => {
-    const roomId = '1234';
-    const socket = await io(`${ioUrl}?roomId=${roomId}`);
-    socket.on('connect', () => {
-      setSocket(socket);
-      history.push(`/room/${roomId}`);
-    });
+    if (!!roomName.length) {
+      const socket = await io(ioUrl);
+      socket.on('connect', () => {
+        setSocket(socket);
+        socket.emit('createRoom', roomName, (room) => {
+          console.log('created room', room);
+          history.push(`/room/${room.id}`, { room });
+        });
+      })
+    }
   };
 
   return (
     <div id="component-home" className={`${className}`}>
+      <input type="text" placeholder="Room name..." onChange={onNameChange} />
       <button onClick={createRoom}>Create room</button>
       {/* <Link to="/room"><small>Join an existing room</small></Link> */}
     </div>
