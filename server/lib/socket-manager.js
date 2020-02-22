@@ -80,7 +80,6 @@ const createRoom = (socket, { hostName, roomName }, callback) => {
   };
   rooms[room.id] = room;
   joinRoom(socket, { roomId: room.id, guestName: hostName }, callback);
-  // if (callback) callback(room);
 };
 
 /**

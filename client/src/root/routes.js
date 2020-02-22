@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import WithSocket from '../hocs/with-socket';
 import Home from '../routes/home';
+import Join from '../routes/join';
 import Room from '../routes/room';
 
 export default () => (
@@ -10,6 +11,7 @@ export default () => (
     <Route exact path="/" render={(props) => (
       <WithSocket {...props} component={Home} />
     )} />
+    <Route exact path="/join/:roomId?" component={Join} />
     <Route exact path="/room/:roomId?" render={(props) => (
       <WithSocket {...props} component={Room} />
     )} />

@@ -9,7 +9,7 @@ const GuestView = ({ className, room }) => {
   console.log('room', room);
   return (
     <div className="component-guest-view" className={`${className}`}>
-      <p>Room: {room.name}</p>
+      <h3>Room: {room.name} </h3>
       <StyledCardList>
         {cardValues.map((value) => (
           <StyledCardListItem key={value}>

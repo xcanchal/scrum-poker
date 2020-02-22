@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { StyledCardList, StyledCardListItem } from '../../components/card-list/';
 
 const HostView = ({ className, room }) => {
-  const inviteLink = `http://${process.env.HOST}:${process.env.PORT}/room/${room.id}`;
+  const inviteLink = `http://${process.env.HOST}:${process.env.PORT}/join/${room.id}`;
 
   return (
     <div className="component-host-view" className={`${className}`}>

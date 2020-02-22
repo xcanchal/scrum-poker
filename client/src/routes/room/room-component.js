@@ -9,6 +9,7 @@ import GuestView from '../../components/guest-view';
 const Room = ({ className, history, location, io, socket, setSocket }) => {
   const { roomId } = useParams();
   const existingRoom = location.state && location.state.room ? location.state.room : {};
+  const guestName = location.state && location.state.guestName ? location.state.guestName : null;
   const [room, setRoom] = useState(existingRoom);
   const [listenersReady, setListenersReady] = useState(false);
 
@@ -29,7 +30,7 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const createSocket = async () => {
     const newSocket = await io(ioUrl);
     setSocket(newSocket);
-    newSocket.emit('joinRoom', { roomId, guestName: 'random' }, setRoom);
+    newSocket.emit('joinRoom', { roomId, guestName }, setRoom);
     addListeners(newSocket);
   };
 
