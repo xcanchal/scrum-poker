@@ -12,10 +12,25 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const guestName = location.state && location.state.guestName ? location.state.guestName : null;
   const [room, setRoom] = useState(existingRoom);
   const [listenersReady, setListenersReady] = useState(false);
+  const [allVoted, setAllVoted] = useState(false);
 
    const kickGuestOut = () => {
     alert('room does not exist!');
     history.push('/');
+  };
+
+  const onVoted = (room) => {
+    // const hostVoted = !!room.host.vote;
+    const guestsVoted = room.guests.every(({ vote }) => !!vote);
+    if (/* hostVoted &&  */guestsVoted) {
+      setAllVoted(true);
+    }
+    setRoom(room);
+  };
+
+  const onVotesCleared = (room) => {
+    setAllVoted(false);
+    setRoom(room);
   };
 
   const addListeners = (sckt) => {
@@ -23,6 +38,8 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
       sckt.on('unexistingRoom', kickGuestOut);
       sckt.on('guestJoined', setRoom);
       sckt.on('guestLeft', setRoom);
+      sckt.on('voted', onVoted);
+      sckt.on('votesCleared', onVotesCleared);
       setListenersReady(true);
     }
   };
@@ -35,10 +52,18 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   };
 
   useEffect(() => {
-    if (!socket.id) {
-      createSocket();
+    if (!room.host && !guestName) {
+      if (roomId) {
+        history.replace(`/join/${roomId}`);
+      } else {
+        history.replace('/');
+      }
     } else {
-      addListeners(socket);
+      if (!socket.id) {
+        createSocket();
+      } else {
+        addListeners(socket);
+      }
     }
   }, []);
 
@@ -50,11 +75,21 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
     }
   }, [socket]);
 
-  console.log('socket', socket);
+
+  const vote = (value) => {
+    socket.emit('vote', { roomId, value });
+  };
+
+  const clearVotes = () => {
+    socket.emit('clearVotes', roomId);
+  }
 
   return socket.id && room.id ? (
     <div id="room-component" className={`${className}`}>
-      {socket.id === room.host.id ? <HostView room={room} /> : <GuestView room={room} /> }
+      {socket.id === room.host.id ?
+        <HostView room={room} allVoted={allVoted} clearVotes={clearVotes} /> :
+        <GuestView room={room} vote={vote} />
+      }
     </div>
   ) : null;
 };

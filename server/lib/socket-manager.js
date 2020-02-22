@@ -5,8 +5,46 @@ const rooms = {};
 
 const getRoomResponse = (room) => ({
   ...room,
-  guests: room.guests.map(({ id, name }) => ({ id, name })),
+  guests: room.guests.map(({ socket, ...guestData }) => guestData),
 });
+
+/**
+ * Clear all guests votes in a room
+ * @param {*} socket connection
+ * @param {*} roomId id of the room
+ */
+const clearVotes = (socket, roomId) => {
+  const room = rooms[roomId];
+  if (!room) {
+    socket.emit('unexistingRoom');
+  } else {
+    const { vote, ...hostData } = room.host;
+    room.host = hostData;
+    room.guests = room.guests.map(({ vote, ...guestData }) => guestData);
+    socket.emit('votesCleared', getRoomResponse(room));
+  }
+}
+
+/**
+ * Used by guests to vote
+ * @param {Object} socket connection
+ * @param {String} roomId id of the room
+ * @param {String} value voted value
+ */
+const vote = (socket, { roomId, value }) => {
+  const room = rooms[roomId];
+  if (!room) {
+    socket.emit('unexistingRoom');
+  } else {
+    if (socket.id === room.host.id) {
+      room.host.vote = value;
+    } else {
+      const guest = room.guests.find(({ id }) => id === socket.id);
+      guest.vote = value;
+    }
+    socket.broadcast.to(roomId).emit('voted', getRoomResponse(room));
+  }
+}
 
 /**
  * Kick the guest out of all the rooms where is in
@@ -41,11 +79,8 @@ const leaveRooms = (socket) => {
  * @param {Function} callback function
  */
 const joinRoom = (socket, { roomId, guestName }, callback) => {
-  console.log('joinRoom - socket, roomId', socket.id, roomId);
-  console.log(rooms);
   const room = rooms[roomId];
   if (!room) {
-    console.log('no room');
     socket.emit('unexistingRoom');
   } else {
     socket.join(roomId, () => {
@@ -91,6 +126,8 @@ module.exports = (io) => {
     socket.on('createRoom', (params, callback) => createRoom(socket, params, callback));
     socket.on('joinRoom', (params, callback) => joinRoom(socket, params, callback));
     socket.on('leaveRoom', () => leaveRooms(socket));
+    socket.on('vote', (params) => vote(socket, params));
+    socket.on('clearVotes', (roomId) => clearVotes(socket, roomId));
     socket.on('disconnect', () => leaveRooms(socket));
   });
 };

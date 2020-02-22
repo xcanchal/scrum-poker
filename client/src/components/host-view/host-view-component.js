@@ -1,24 +1,31 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledCardList, StyledCardListItem } from '../../components/card-list/';
 
-const HostView = ({ className, room }) => {
+const HostView = ({
+  className,
+  room,
+  allVoted,
+  clearVotes
+}) => {
   const inviteLink = `http://${process.env.HOST}:${process.env.PORT}/join/${room.id}`;
 
   return (
     <div className="component-host-view" className={`${className}`}>
       <h3>Room: {room.name} </h3>
       <p>Hi {room.host.name}, you are the host. Use this link to invite others: <a href={inviteLink} target="_blank">{inviteLink}</a></p>
-
+      {allVoted && <button onClick={clearVotes}>Reset</button>}
       <div className="component-host-view__cards">
         <StyledCardList>
-          {room.guests.map(({ id, name }) => (
+          {/* <div className="component-host-view__card-wrap">
+            <StyledCardListItem><span>{allVoted ? room.host.vote : '?'}</span></StyledCardListItem>
+            <span>{room.host.name}</span>
+          </div> */}
+          {room.guests.map(({ id, name, vote = '?' }) => (
             <div className="component-host-view__card-wrap" key={id}>
-              <Fragment>
-                <StyledCardListItem><span>?</span></StyledCardListItem>
-              </Fragment>
-              <p>{name}</p>
+              <StyledCardListItem><span>{allVoted ? vote : '?'}</span></StyledCardListItem>
+              <span>{name}</span>
             </div>
           ))}
         </StyledCardList>
@@ -30,6 +37,8 @@ const HostView = ({ className, room }) => {
 HostView.propTypes = {
   className: PropTypes.string.isRequired,
   room: PropTypes.object,
+  allVoted: PropTypes.bool.isRequired,
+  clearVotes: PropTypes.func.isRequired,
 };
 
 HostView.defaultProps = {

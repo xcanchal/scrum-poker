@@ -7,15 +7,20 @@ export default styled(CardListItem)`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ddd;
-  margin: 8px;
+  border: 2px solid #ddd;
   border-radius: 8px;
   font-weight: 300;
   font-size: 2rem;
   cursor: pointer;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
+
+  ${({ selected }) => selected && `
+    color: #00e676;
+    border-color: #00e676;
+  `}
 
   &:hover {
-    border-color: #444;
+    color: #00e676;
+    border-color: #00e676;
   }
 `
