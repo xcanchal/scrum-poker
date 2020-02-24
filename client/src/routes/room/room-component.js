@@ -15,6 +15,7 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const [listenersReady, setListenersReady] = useState(false);
   const [guestsVoted, setGuestsVoted] = useState(false);
   const [hostVoted, setHostVoted] = useState(false);
+  const [votedValue, setVotedValue] = useState(null);
 
    const kickGuestOut = () => {
     alert('room does not exist!');
@@ -30,6 +31,7 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const onVotesCleared = (room) => {
     setGuestsVoted(false);
     setHostVoted(false);
+    setVotedValue(null);
     setRoom(room);
   };
 
@@ -75,8 +77,8 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
     }
   }, [socket]);
 
-
   const vote = (value) => {
+    setVotedValue(value);
     socket.emit('vote', { roomId, value });
   };
 
@@ -85,16 +87,21 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   }
 
   const getView = () => {
-    const guestProps = { room, vote };
+    const guestProps = { room, vote, votedValue };
     if (socket.id === room.host.id) {
-      return guestsVoted && !hostVoted ?
+      return (guestsVoted && !hostVoted) ?
         <GuestView {...guestProps} /> :
-        <HostView room={room} guestsVoted={guestsVoted} hostVoted={hostVoted} clearVotes={clearVotes} />;
+        <HostView
+          room={room}
+          guestsVoted={guestsVoted}
+          hostVoted={hostVoted}
+          clearVotes={clearVotes}
+        />;
     }
     return <GuestView {...guestProps} />;
   }
 
-  return socket.id && room.id ? (
+  return (socket.id && room.id) ? (
     <div id="room-component" className={`${className}`}>
       {getView()}
     </div>

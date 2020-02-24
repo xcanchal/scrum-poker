@@ -10,10 +10,11 @@ const getRoomResponse = (room) => ({
 
 /**
  * Clear all guests votes in a room
+ * @param {Object} io connection
  * @param {Object} socket connection
  * @param {String} roomId id of the room
  */
-const clearVotes = (socket, roomId) => {
+const clearVotes = (io, socket, roomId) => {
   const room = rooms[roomId];
   if (!room) {
     socket.emit('unexistingRoom');
@@ -21,7 +22,7 @@ const clearVotes = (socket, roomId) => {
     const { vote, ...hostData } = room.host;
     room.host = hostData;
     room.guests = room.guests.map(({ vote, ...guestData }) => guestData);
-    socket.emit('votesCleared', getRoomResponse(room));
+    io.sockets.emit('votesCleared', getRoomResponse(room));
   }
 }
 
@@ -43,7 +44,6 @@ const vote = (io, socket, { roomId, value }) => {
       const guest = room.guests.find(({ id }) => id === socket.id);
       guest.vote = value;
     }
-    // socket.broadcast.to(roomId).emit('voted', getRoomResponse(room));
     io.sockets.emit('voted', getRoomResponse(room));
   }
 }
@@ -129,7 +129,7 @@ module.exports = (io) => {
     socket.on('joinRoom', (params, callback) => joinRoom(socket, params, callback));
     socket.on('leaveRoom', () => leaveRooms(socket));
     socket.on('vote', (params) => vote(io, socket, params));
-    socket.on('clearVotes', (roomId) => clearVotes(socket, roomId));
+    socket.on('clearVotes', (roomId) => clearVotes(io, socket, roomId));
     socket.on('disconnect', () => leaveRooms(socket));
   });
 };
