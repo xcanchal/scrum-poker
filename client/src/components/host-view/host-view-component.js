@@ -6,10 +6,12 @@ import { StyledCardList, StyledCardListItem } from '../../components/card-list/'
 const HostView = ({
   className,
   room,
-  allVoted,
+  guestsVoted,
+  hostVoted,
   clearVotes
 }) => {
   const inviteLink = `http://${process.env.HOST}:${process.env.PORT}/join/${room.id}`;
+  const allVoted = guestsVoted && hostVoted;
 
   return (
     <div className="component-host-view" className={`${className}`}>
@@ -18,10 +20,10 @@ const HostView = ({
       {allVoted && <button onClick={clearVotes}>Reset</button>}
       <div className="component-host-view__cards">
         <StyledCardList>
-          {/* <div className="component-host-view__card-wrap">
-            <StyledCardListItem><span>{allVoted ? room.host.vote : '?'}</span></StyledCardListItem>
+          <div className="component-host-view__card-wrap">
+            <StyledCardListItem><span>{room.host.vote ? room.host.vote : '?'}</span></StyledCardListItem>
             <span>{room.host.name}</span>
-          </div> */}
+          </div>
           {room.guests.map(({ id, name, vote = '?' }) => (
             <div className="component-host-view__card-wrap" key={id}>
               <StyledCardListItem><span>{allVoted ? vote : '?'}</span></StyledCardListItem>
@@ -37,7 +39,8 @@ const HostView = ({
 HostView.propTypes = {
   className: PropTypes.string.isRequired,
   room: PropTypes.object,
-  allVoted: PropTypes.bool.isRequired,
+  guestsVoted: PropTypes.bool.isRequired,
+  hostVoted: PropTypes.bool.isRequired,
   clearVotes: PropTypes.func.isRequired,
 };
 

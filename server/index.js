@@ -22,7 +22,7 @@ dotenv.config();
 
   // socket
   const io = require('socket.io').listen(server);
-  io.set('origins', `http://${host}:${clientPort}`);
+  io.set('origins', '*:*');
   socketManager(io);
 
   try {

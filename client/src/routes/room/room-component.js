@@ -6,13 +6,15 @@ import { ioUrl } from '../../config';
 import HostView from '../../components/host-view';
 import GuestView from '../../components/guest-view';
 
+
 const Room = ({ className, history, location, io, socket, setSocket }) => {
   const { roomId } = useParams();
   const existingRoom = location.state && location.state.room ? location.state.room : {};
   const guestName = location.state && location.state.guestName ? location.state.guestName : null;
   const [room, setRoom] = useState(existingRoom);
   const [listenersReady, setListenersReady] = useState(false);
-  const [allVoted, setAllVoted] = useState(false);
+  const [guestsVoted, setGuestsVoted] = useState(false);
+  const [hostVoted, setHostVoted] = useState(false);
 
    const kickGuestOut = () => {
     alert('room does not exist!');
@@ -20,16 +22,14 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   };
 
   const onVoted = (room) => {
-    // const hostVoted = !!room.host.vote;
-    const guestsVoted = room.guests.every(({ vote }) => !!vote);
-    if (/* hostVoted &&  */guestsVoted) {
-      setAllVoted(true);
-    }
+    if (room.guests.every(({ vote }) => !!vote)) setGuestsVoted(true);
+    if (!!room.host.vote) setHostVoted(true);
     setRoom(room);
   };
 
   const onVotesCleared = (room) => {
-    setAllVoted(false);
+    setGuestsVoted(false);
+    setHostVoted(false);
     setRoom(room);
   };
 
@@ -84,12 +84,19 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
     socket.emit('clearVotes', roomId);
   }
 
+  const getView = () => {
+    const guestProps = { room, vote };
+    if (socket.id === room.host.id) {
+      return guestsVoted && !hostVoted ?
+        <GuestView {...guestProps} /> :
+        <HostView room={room} guestsVoted={guestsVoted} hostVoted={hostVoted} clearVotes={clearVotes} />;
+    }
+    return <GuestView {...guestProps} />;
+  }
+
   return socket.id && room.id ? (
     <div id="room-component" className={`${className}`}>
-      {socket.id === room.host.id ?
-        <HostView room={room} allVoted={allVoted} clearVotes={clearVotes} /> :
-        <GuestView room={room} vote={vote} />
-      }
+      {getView()}
     </div>
   ) : null;
 };

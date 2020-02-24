@@ -10,8 +10,8 @@ const getRoomResponse = (room) => ({
 
 /**
  * Clear all guests votes in a room
- * @param {*} socket connection
- * @param {*} roomId id of the room
+ * @param {Object} socket connection
+ * @param {String} roomId id of the room
  */
 const clearVotes = (socket, roomId) => {
   const room = rooms[roomId];
@@ -27,11 +27,12 @@ const clearVotes = (socket, roomId) => {
 
 /**
  * Used by guests to vote
+ * @param {Object} io connection
  * @param {Object} socket connection
  * @param {String} roomId id of the room
  * @param {String} value voted value
  */
-const vote = (socket, { roomId, value }) => {
+const vote = (io, socket, { roomId, value }) => {
   const room = rooms[roomId];
   if (!room) {
     socket.emit('unexistingRoom');
@@ -42,7 +43,8 @@ const vote = (socket, { roomId, value }) => {
       const guest = room.guests.find(({ id }) => id === socket.id);
       guest.vote = value;
     }
-    socket.broadcast.to(roomId).emit('voted', getRoomResponse(room));
+    // socket.broadcast.to(roomId).emit('voted', getRoomResponse(room));
+    io.sockets.emit('voted', getRoomResponse(room));
   }
 }
 
@@ -126,7 +128,7 @@ module.exports = (io) => {
     socket.on('createRoom', (params, callback) => createRoom(socket, params, callback));
     socket.on('joinRoom', (params, callback) => joinRoom(socket, params, callback));
     socket.on('leaveRoom', () => leaveRooms(socket));
-    socket.on('vote', (params) => vote(socket, params));
+    socket.on('vote', (params) => vote(io, socket, params));
     socket.on('clearVotes', (roomId) => clearVotes(socket, roomId));
     socket.on('disconnect', () => leaveRooms(socket));
   });
