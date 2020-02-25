@@ -7,7 +7,8 @@ const Input = ({
   value,
   onChange,
   id,
-  className
+  className,
+  maxLength,
 }) => (
   <input
     {...(id ? { id } : {} )}
@@ -16,6 +17,7 @@ const Input = ({
     placeholder={placeholder}
     onChange={onChange}
     value={value}
+    maxLength={maxLength}
   />
 );
 
@@ -25,7 +27,8 @@ Input.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   id: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  maxLength: PropTypes.number,
 };
 
 Input.defaultProps = {
@@ -35,6 +38,7 @@ Input.defaultProps = {
   onChange: () => {},
   className: '',
   size: 'md',
+  maxLength: 30,
 };
 
 export default Input;

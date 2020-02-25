@@ -16,10 +16,18 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const [guestsVoted, setGuestsVoted] = useState(false);
   const [hostVoted, setHostVoted] = useState(false);
   const [votedValue, setVotedValue] = useState(null);
+  const [sessionStarted, setSessionStarted] = useState(false);
 
    const kickGuestOut = (reason) => {
     alert(reason);
     history.push('/session-end', { reason });
+  };
+
+  const onGuestJoin = (room) => {
+    if (!sessionStarted) {
+      setSessionStarted(false);
+    }
+    setRoom(room);
   };
 
   const onVoted = (room) => {
@@ -37,12 +45,13 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
 
   const addListeners = (sckt) => {
     if (!listenersReady) {
-      sckt.on('unexistingRoom', () => kickGuestOut('Room does no longer exist.'));
-      sckt.on('guestJoined', setRoom);
+      sckt.on('unexistingRoom', () => kickGuestOut('The room does no longer exist'));
+      sckt.on('guestJoined', onGuestJoin);
       sckt.on('guestLeft', setRoom);
-      sckt.on('hostLeft', () => kickGuestOut('The host has ended the session.'));
+      sckt.on('hostLeft', () => kickGuestOut('The host has ended the session'));
       sckt.on('voted', onVoted);
       sckt.on('votesCleared', onVotesCleared);
+      sckt.on('sessionStarted', () => setSessionStarted(true));
       setListenersReady(true);
     }
   };
@@ -87,10 +96,14 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
     socket.emit('clearVotes', roomId);
   }
 
+  const startSession = () => {
+    socket.emit('startSession', roomId);
+  };
+
   const getView = () => {
     const isHost = socket.id === room.host.id;
-    const guestProps = { room, vote, votedValue };
-    const hostProps = { room, guestsVoted, hostVoted, clearVotes, isHost };
+    const guestProps = { room, vote, votedValue, sessionStarted };
+    const hostProps = { room, guestsVoted, hostVoted, clearVotes, isHost, startSession, sessionStarted };
     if (isHost) {
       return (guestsVoted && !hostVoted) ?
         <GuestView {...guestProps} /> :

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledCardList, StyledCardListItem } from '../../components/card-list/';
+import StyledButton from '../../components/button';
+
 /*
 const getResults = (votes) => {
   let results = {};
@@ -29,6 +31,8 @@ const HostView = ({
   hostVoted,
   clearVotes,
   isHost,
+  startSession,
+  sessionStarted,
 }) => {
   const inviteLink = `http://${process.env.HOST}:${process.env.PORT}/join/${room.id}`;
   const allVoted = guestsVoted && hostVoted;
@@ -39,15 +43,16 @@ const HostView = ({
 
   return (
     <div className="component-host-view" className={`${className}`}>
-      <h3>{room.name} {(allVoted && isHost) && <button onClick={clearVotes}>Reset</button>}</h3>
+      <h2>{room.name}</h2>
       {isHost && <p>Hi {room.host.name}, you are the host. Use this link to invite others: <a href={inviteLink} target="_blank">{inviteLink}</a></p>}
       <div className="component-host-view__cards">
         <StyledCardList>
           <div className="component-host-view__card-wrap">
             <StyledCardListItem
-              disabled={!guestsVoted}
               /* error={room.host.vote && otherVotes && otherVotes.includes(room.host.vote)} */
-              onHold={allVoted}
+              disabled={!guestsVoted}
+              revealed={allVoted}
+              readOnly
             >
               <span>{room.host.vote ? room.host.vote : '?'}</span>
               {!hostVoted && <small>Wait until all guests voted</small>}
@@ -58,16 +63,35 @@ const HostView = ({
             <div className="component-host-view__card-wrap" key={id}>
               <StyledCardListItem
                 /* error={vote && otherVotes && otherVotes.includes(vote)} */
-                onHold={allVoted}
+                disabled={!sessionStarted}
+                revealed={allVoted}
+                readOnly
               >
                 <span>{allVoted ? vote : '?'}</span>
+                {!sessionStarted && <small>Session not started</small>}
               </StyledCardListItem>
               <span>{name}</span>
             </div>
           ))}
         </StyledCardList>
       </div>
-  </div>
+      {!sessionStarted && !!room.guests.length && (
+        <StyledButton
+          onClick={startSession}
+          className="component-host-view__button component-host-view__button--start"
+        >
+          Start session
+        </StyledButton>
+      )}
+      {(allVoted && isHost) && (
+        <StyledButton
+          onClick={clearVotes}
+          className="component-host-view__button component-host-view__button-reset"
+        >
+          Clear votes
+        </StyledButton>
+      )}
+    </div>
   );
 };
 
@@ -78,6 +102,8 @@ HostView.propTypes = {
   guestsVoted: PropTypes.bool.isRequired,
   hostVoted: PropTypes.bool.isRequired,
   clearVotes: PropTypes.func.isRequired,
+  startSession: PropTypes.func.isRequired,
+  sessionStarted: PropTypes.bool.isRequired,
 };
 
 HostView.defaultProps = {

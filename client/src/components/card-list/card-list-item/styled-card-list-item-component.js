@@ -43,16 +43,6 @@ export default styled(CardListItem)`
     text-align: center;
   }
 
-  ${({ selected }) => selected && `
-    color: #1f754b;
-    background-color: #39f197;
-    border-color: #87ffc4;
-
-    span {
-      color: #1e774c;
-    }
-  `}
-
   ${({ error }) => error && `
     background-color: ${Colors.error};
     border-color: ${Colors.errorLight};
@@ -76,7 +66,17 @@ export default styled(CardListItem)`
     }
   `}
 
-  ${({ onHold }) => onHold && `
+  ${({ revealed, selected }) => (revealed || selected) && `
+    background-color: ${Colors.greyLighter};
+    border-color: ${Colors.white};
+    pointer-events: none;
+
+    span {
+      color: ${Colors.greyDarker};
+    }
+  `}
+
+  ${({ readOnly }) => readOnly && `
     pointer-events: none;
   `}
 `

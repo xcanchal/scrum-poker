@@ -12,6 +12,5 @@ export default styled(SessionEnd)`
     flex-wrap: wrap;
     max-width: 780px;
     text-align: center;
-    margin-top: 50px;
   }
 `;

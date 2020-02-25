@@ -14,6 +14,16 @@ const getRoomResponse = (room) => ({
  * @param {Object} socket connection
  * @param {String} roomId id of the room
  */
+const startSession = (io, socket, roomId) => {
+  io.sockets.emit('sessionStarted');
+};
+
+/**
+ * Clear all guests votes in a room
+ * @param {Object} io connection
+ * @param {Object} socket connection
+ * @param {String} roomId id of the room
+ */
 const clearVotes = (io, socket, roomId) => {
   const room = rooms[roomId];
   if (!room) {
@@ -140,6 +150,7 @@ module.exports = (io) => {
     socket.on('leaveRoom', () => leaveRooms(socket));
     socket.on('vote', (params) => vote(io, socket, params));
     socket.on('clearVotes', (roomId) => clearVotes(io, socket, roomId));
+    socket.on('startSession', (roomId) => startSession(io, socket, roomId));
     socket.on('disconnect', () => leaveRooms(socket));
   });
 };

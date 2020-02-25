@@ -48,8 +48,8 @@ const GlobalStyles = css`
   }
 
   .layout-content {
-    padding: 80px 24px 24px 24px;
-    height: calc(100vh - 80px);
+    padding: 100px 24px 24px 24px;
+    height: calc(100vh - 100px);
     min-height: 500px;
   }
 `;

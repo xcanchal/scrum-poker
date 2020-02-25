@@ -11,7 +11,7 @@ export default styled(Button)`
   border: none;
   border-radius: 4px;
   font-size: 1rem;
-  padding: 16px 20px;
+  padding: 12px 20px;
   cursor: pointer;
   color: ${Colors.white};
   width: 100%;
@@ -31,5 +31,9 @@ export default styled(Button)`
   ${({ size }) => size === 'lg' && `
     font-size: 1.2rem;
     padding: 20px 24px;
+  `}
+
+  ${({ size }) => size === 'sm' && `
+    padding: 8px 16px;
   `}
 `;
