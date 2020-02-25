@@ -7,7 +7,7 @@ import Routes from './routes';
 
 import GlobalStyles from './global-styles';
 
-const App = (/* { io } */) => (
+const App = () => (
   <SocketProvider>
     <GlobalStyles />
     <Router>
@@ -15,7 +15,7 @@ const App = (/* { io } */) => (
         <Header />
       </div>
       <div className="layout-content">
-        <Routes /* io={io} */ />
+        <Routes />
       </div>
     </Router>
   </SocketProvider>

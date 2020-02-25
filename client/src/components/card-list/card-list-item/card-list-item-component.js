@@ -13,10 +13,14 @@ const CardListItem = ({ className, children, onClick }) => (
 CardListItem.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
+  error: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 CardListItem.defaultProps = {
   className: '',
+  error: false,
+  disabled: false,
 };
 
 export default CardListItem;

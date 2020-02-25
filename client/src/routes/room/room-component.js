@@ -87,23 +87,25 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   }
 
   const getView = () => {
+    const isHost = socket.id === room.host.id;
     const guestProps = { room, vote, votedValue };
-    if (socket.id === room.host.id) {
+    const hostProps = { room, guestsVoted, hostVoted, clearVotes, isHost };
+    if (isHost) {
       return (guestsVoted && !hostVoted) ?
         <GuestView {...guestProps} /> :
-        <HostView
-          room={room}
-          guestsVoted={guestsVoted}
-          hostVoted={hostVoted}
-          clearVotes={clearVotes}
+        <HostView {...hostProps}
         />;
     }
-    return <GuestView {...guestProps} />;
+    return (guestsVoted && hostVoted) ?
+      <HostView {...hostProps} /> :
+      <GuestView {...guestProps} />;
   }
 
   return (socket.id && room.id) ? (
     <div id="room-component" className={`${className}`}>
-      {getView()}
+      <div className="component-room__content">
+        {getView()}
+      </div>
     </div>
   ) : null;
 };

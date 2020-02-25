@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, useParams } from 'react-router-dom';
 
+import StyledInput from '../../components/input';
+import StyledButton from '../../components/button';
+
 const Join = ({ className, history }) => {
   const { roomId } = useParams();
   const [guestName, setGuestName] = useState('');
@@ -24,8 +27,22 @@ const Join = ({ className, history }) => {
 
   return (
     <div id="component-join" className={`${className}`}>
-      <input type="text" placeholder="Your name" onChange={onGuestChangeName} value={guestName} />
-      <button onClick={joinRoom}>Join</button>
+      <div className="component-join__content">
+        <StyledInput
+          className="component-join__input component-home__input__host-name"
+          placeholder="Your name"
+          onChange={onGuestChangeName}
+          value={guestName}
+          size="lg"
+        />
+        <StyledButton
+          className="component-join__button"
+          onClick={joinRoom}
+          size="lg"
+        >
+          Join
+        </StyledButton>
+      </div>
     </div>
   );
 }

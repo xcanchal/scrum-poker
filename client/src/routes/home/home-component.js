@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { ioUrl } from '../../config';
+import StyledInput from '../../components/input';
+import StyledButton from '../../components/button';
 
 const Home = ({ className, history, io, socket, setSocket }) => {
   const [hostName, setHostName] = useState('');
@@ -34,11 +36,29 @@ const Home = ({ className, history, io, socket, setSocket }) => {
   };
 
   return (
-    <div id="component-home" className={`${className}`}>
-      <input type="text" placeholder="Your name" onChange={onHostNameChange} value={hostName} />
-      <input type="text" placeholder="Room..." onChange={onRoomNameChange} value={roomName} />
-      <button onClick={createRoom}>Create room</button>
-      {/* <Link to="/room"><small>Join an existing room</small></Link> */}
+    <div id="component-home" className={`${className} component-home`}>
+      <div className="component-home__content">
+        <StyledInput
+          className="component-home__input component-home__input__host-name"
+          placeholder="Your name"
+          onChange={onHostNameChange}
+          value={hostName}
+          size="lg"
+          />
+        <StyledInput
+          className="component-home__input component-home__input__room-name"
+          placeholder="Room name"
+          onChange={onRoomNameChange}
+          value={roomName}
+          size="lg"
+          />
+        <StyledButton
+          className="component-home__button"
+          onClick={createRoom}
+          size="lg">
+            Create room
+          </StyledButton>
+      </div>
     </div>
   );
 }

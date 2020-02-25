@@ -4,6 +4,7 @@ import HostView from './host-view-component';
 export default styled(HostView)`
   .component-host-view__card-wrap {
     padding: 8px;
+    text-align: center;
   }
 
   .card-list-item {
