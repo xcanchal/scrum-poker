@@ -27,6 +27,7 @@ const Join = ({ className, history }) => {
 
   return (
     <div id="component-join" className={`${className}`}>
+      <h1>Join room</h1>
       <div className="component-join__content">
         <StyledInput
           className="component-join__input component-home__input__host-name"

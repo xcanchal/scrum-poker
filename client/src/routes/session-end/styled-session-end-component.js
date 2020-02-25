@@ -1,20 +1,17 @@
 import styled from 'styled-components';
-import Room from './room-component';
+import SessionEnd from './session-end-component';
 
-export default styled(Room)`
+export default styled(SessionEnd)`
   display: flex;
   align-items: center;
   justify-content: center;
 
-  .component-room__content {
+  .component-session-end__content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     max-width: 780px;
     text-align: center;
-
-    a {
-      display: block;
-    }
+    margin-top: 50px;
   }
 `;

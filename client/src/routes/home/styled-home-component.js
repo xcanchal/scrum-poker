@@ -3,6 +3,7 @@ import Home from './home-component';
 
 export default styled(Home)`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;

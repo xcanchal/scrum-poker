@@ -37,6 +37,7 @@ const Home = ({ className, history, io, socket, setSocket }) => {
 
   return (
     <div id="component-home" className={`${className} component-home`}>
+      <h1>Create a room</h1>
       <div className="component-home__content">
         <StyledInput
           className="component-home__input component-home__input__host-name"

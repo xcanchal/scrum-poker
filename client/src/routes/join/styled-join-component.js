@@ -3,6 +3,7 @@ import Join from './join-component';
 
 export default styled(Join)`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;

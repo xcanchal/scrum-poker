@@ -1,7 +1,7 @@
 const uuid = require('uuid/v4');
 
 // Initial state
-const rooms = {};
+let rooms = {};
 
 const getRoomResponse = (room) => ({
   ...room,
@@ -55,22 +55,32 @@ const vote = (io, socket, { roomId, value }) => {
 const leaveRooms = (socket) => {
   const emptyRoomIds = [];
 
-  for (const [roomId, { guests }] of Object.entries(rooms)) {
+  for (const [roomId, { guests, host }] of Object.entries(rooms)) {
     const guestInRoom = guests.find(({ id }) => id === socket.id);
-    if (guestInRoom) {
+    const hostInRoom = host.id === socket.id;
+
+    if (guestInRoom || hostInRoom) {
       socket.leave(roomId);
-      const room = rooms[roomId];
+    }
+
+    const { [roomId] : room, ...otherRooms } = rooms;
+
+    if (guestInRoom) {
       room.guests = room.guests.filter(({ id }) => id !== socket.id);
       socket.broadcast.to(roomId).emit('guestLeft', getRoomResponse(room));
-
-      if (![room.host, room.guests].length) {
-        emptyRoomIds.push(roomId);
-      }
+    } else if (hostInRoom) {
+      rooms = otherRooms;
+      socket.broadcast.to(roomId).emit('hostLeft');
     }
 
-    for (const emptyRoomId of emptyRoomIds) {
-      delete rooms[emptyRoomId];
+    if (![room.host, room.guests].length) {
+      emptyRoomIds.push(roomId);
     }
+  }
+
+  for (const emptyRoomId of emptyRoomIds) {
+    const { [emptyRoomId]: emptyRoom, ...nonEmptyRooms } = rooms;
+    rooms = nonEmptyRooms;
   }
 };
 

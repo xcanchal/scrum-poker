@@ -17,9 +17,9 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
   const [hostVoted, setHostVoted] = useState(false);
   const [votedValue, setVotedValue] = useState(null);
 
-   const kickGuestOut = () => {
-    alert('room does not exist!');
-    history.push('/');
+   const kickGuestOut = (reason) => {
+    alert(reason);
+    history.push('/session-end', { reason });
   };
 
   const onVoted = (room) => {
@@ -37,9 +37,10 @@ const Room = ({ className, history, location, io, socket, setSocket }) => {
 
   const addListeners = (sckt) => {
     if (!listenersReady) {
-      sckt.on('unexistingRoom', kickGuestOut);
+      sckt.on('unexistingRoom', () => kickGuestOut('Room does no longer exist.'));
       sckt.on('guestJoined', setRoom);
       sckt.on('guestLeft', setRoom);
+      sckt.on('hostLeft', () => kickGuestOut('The host has ended the session.'));
       sckt.on('voted', onVoted);
       sckt.on('votesCleared', onVotesCleared);
       setListenersReady(true);
