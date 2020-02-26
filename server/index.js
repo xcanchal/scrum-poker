@@ -8,17 +8,16 @@ dotenv.config();
 
 (module.exports = async () => {
 
-  const { HOST: host, PORT: port, CLIENT_PORT: clientPort } = process.env;
+  const { PORT: port = 9000 } = process.env;
   const server = http.createServer(app);
 
   // middlewares
-  app.options(`http://${host}:${clientPort}`, cors());
-  app.use(cors({ origin: `http://${host}:${clientPort}`, credentials: true }));
+  app.use(cors(/* { origin: '*' } */));
 
   // routes
- /*  app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-  }); */
+  app.get('/', (req, res) => {
+    res.sendFile('./index.html');
+  });
 
   // socket
   const io = require('socket.io').listen(server);
@@ -27,7 +26,7 @@ dotenv.config();
 
   try {
     await server.listen(port);
-    console.log(`server running on http://${host}:${port}`);
+    console.log(`server running on port ${port}`);
   } catch (error) {
     console.error('server error', error);
     process.exit(1);
