@@ -6,7 +6,7 @@ const path = require('path');
 
 const socketManager = require('./lib/socket-manager');
 
-dotenv.config();
+// dotenv.config();
 
 (module.exports = async () => {
 
