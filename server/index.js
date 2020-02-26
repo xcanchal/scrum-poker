@@ -2,6 +2,8 @@ const app = require('express')();
 const http = require('http');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
+
 const socketManager = require('./lib/socket-manager');
 
 dotenv.config();
@@ -16,7 +18,7 @@ dotenv.config();
 
   // routes
   app.get('/', (req, res) => {
-    res.sendFile('./index.html');
+    res.sendFile(path.join(__dirname, 'index.html'));
   });
 
   // socket
