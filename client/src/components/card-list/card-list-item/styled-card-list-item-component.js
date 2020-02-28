@@ -71,6 +71,11 @@ export default styled(CardListItem)`
     border-color: ${Colors.white};
     pointer-events: none;
 
+    &:hover {
+      background-color: ${Colors.greyLighter};
+      border-color: ${Colors.white};
+    }
+
     span {
       color: ${Colors.greyDarker};
     }

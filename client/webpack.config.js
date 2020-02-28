@@ -3,18 +3,16 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+dotenv.config();
 
 const src = path.resolve(__dirname, 'src');
 const dist = path.resolve(__dirname, 'dist');
 
-const {
-  NODE_ENV: environment = 'development',
-  HOST: host = '0.0.0.0',
-  PORT: port = '9001',
-} = process.env;
+const { NODE_ENV: environment, URL: url } = process.env;
+const [host, port] = url.split(':');
 
 module.exports = () => ({
-  mode: environment === 'development' ? 'development' : 'production',
+  mode: environment,
   entry: {
     app: `${src}/index.js`,
   },

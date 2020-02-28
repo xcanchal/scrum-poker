@@ -34,7 +34,7 @@ const HostView = ({
   startSession,
   sessionStarted,
 }) => {
-  const inviteLink = `http://${process.env.HOST}:${process.env.PORT}/join/${room.id}`;
+  const inviteLink = `${process.env.URL}/join/${room.id}`;
   const allVoted = guestsVoted && hostVoted;
   /* const { popular, otherVotes } = (guestsVoted && hostVoted) ?
     getResults([room.host.vote, room.guests.map(({ vote }) => vote)]) :

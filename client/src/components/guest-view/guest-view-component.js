@@ -9,27 +9,18 @@ const GuestView = ({ className, room, vote, votedValue, sessionStarted }) => (
   <div className="component-guest-view" className={`${className}`}>
     <h2>{room.name}</h2>
     {sessionStarted ? (
-      <Fragment>
-        <StyledCardList>
-          {cardValues.map((value) => (
-            <div className="component-guest-view__card-wrap" key={value}>
-              <StyledCardListItem
-                selected={(votedValue && value) && votedValue === value}
-                onClick={() => vote(value)}
-              >
-                <span>{value}</span>
-              </StyledCardListItem>
-            </div>
-          ))}
-        </StyledCardList>
-{/*         <p>Participants:</p>
-        <ul>
-          {room.host && <li>{room.host.name} (host)</li>}
-          {!!room.guests.length && room.guests.filter((guest) => guest).map(({ id, name }) => (
-            <li key={id}>{name}</li>
-          ))}
-        </ul> */}
-      </Fragment>
+      <StyledCardList>
+        {cardValues.map((value) => (
+          <div className="component-guest-view__card-wrap" key={value}>
+            <StyledCardListItem
+              selected={(votedValue && value) && votedValue === value}
+              onClick={() => vote(value)}
+            >
+              <span>{value}</span>
+            </StyledCardListItem>
+          </div>
+        ))}
+      </StyledCardList>
     ) : (
       <p>Waiting for the host to start the session.</p>
     )}

@@ -28,7 +28,6 @@ const Home = ({ className, history, io, socket, setSocket }) => {
   }, []);
 
   const createRoom = async () => {
-    console.log('socket', socket);
     if (socket && !!roomName.length && !!hostName.length) {
       socket.emit('createRoom', { hostName, roomName }, (room) => {
         history.push(`/room/${room.id}`, { room });
