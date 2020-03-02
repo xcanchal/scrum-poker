@@ -1,12 +1,9 @@
 const app = require('express')();
 const http = require('http');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const path = require('path');
 
 const socketManager = require('./lib/socket-manager');
-
-// dotenv.config();
 
 (module.exports = async () => {
 
@@ -14,7 +11,7 @@ const socketManager = require('./lib/socket-manager');
   const server = http.createServer(app);
 
   // middlewares
-  app.use(cors(/* { origin: '*' } */));
+  app.use(cors({ origin: '*' }));
 
   // routes
   app.get('/', (req, res) => {
