@@ -9,7 +9,7 @@ const src = path.resolve(__dirname, 'src');
 const dist = path.resolve(__dirname, 'dist');
 
 const { NODE_ENV: environment, URL: url } = process.env;
-const [host, port] = url.split(':');
+const [host, port] = url.replace('http://', '').split(':');
 
 module.exports = () => ({
   mode: environment,

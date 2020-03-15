@@ -36,6 +36,10 @@ const HostView = ({
 }) => {
   const inviteLink = `${process.env.URL}/join/${room.id}`;
   const allVoted = guestsVoted && hostVoted;
+  const guestVoted = guestId => {
+    const { vote = null } = room.guests.find(({ id }) => id === guestId);
+    return vote;
+  };
   /* const { popular, otherVotes } = (guestsVoted && hostVoted) ?
     getResults([room.host.vote, room.guests.map(({ vote }) => vote)]) :
     { popular: null, otherVotes: [] }; */
@@ -63,7 +67,7 @@ const HostView = ({
             <div className="component-host-view__card-wrap" key={id}>
               <StyledCardListItem
                 /* error={vote && otherVotes && otherVotes.includes(vote)} */
-                disabled={!sessionStarted}
+                disabled={!sessionStarted || !guestVoted(id)}
                 revealed={allVoted}
                 readOnly
               >
