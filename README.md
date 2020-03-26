@@ -1,3 +1,32 @@
-# 🃏Scrum poker (WIP)
+# 🃏Scrum poker app
 
-Scrum poker application to be used in sprint plannings. Based on Express and Socket.io.
+Scrum poker application to be used in sprint plannings.
+
+## Technologies
+
+- [ExpressJS](http://expressjs.com/) and [Socket.io](https://socket.io/) on the server-side.
+- [ReactJS](reactjs.org) on the client-side.
+- [Webpack](https://webpack.js.org/) for the bundles.
+- [Styled-components](https://styled-components.com/) for styling the UI.
+
+## Live site
+
+https://www.scrum-poker.app
+
+Usage example
+
+1. Create a room.
+
+![create a room](./readme-assets/create-room.png)
+
+2. In the host view, you can copy the link to share it with your teammates so they can join the room. Start the session and you'll start seeing their votes (green cards).
+
+![host view](./readme-assets/host-view.png)
+
+3. This is the guest view, where each of the room members will vote the current task. The host is the last one to see this view, the last to vote (must wait until all others did it).
+
+![guest view](./readme-assets/guest-view.png)
+
+4.Results! After agreeing on the final punctuation, clear the votes and another round will start.
+
+![results](./readme-assets/results.png)
