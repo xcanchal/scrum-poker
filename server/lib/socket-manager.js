@@ -10,21 +10,19 @@ const getRoomResponse = (room) => ({
 
 /**
  * Clear all guests votes in a room
- * @param {Object} io connection
  * @param {Object} socket connection
  * @param {String} roomId id of the room
  */
-const startSession = (io, socket, roomId) => {
-  io.sockets.emit('sessionStarted');
+const startSession = (socket, roomId) => {
+  socket.nsp.to(roomId).emit('sessionStarted');
 };
 
 /**
  * Clear all guests votes in a room
- * @param {Object} io connection
  * @param {Object} socket connection
  * @param {String} roomId id of the room
  */
-const clearVotes = (io, socket, roomId) => {
+const clearVotes = (socket, roomId) => {
   const room = rooms[roomId];
   if (!room) {
     socket.emit('unexistingRoom');
@@ -32,18 +30,17 @@ const clearVotes = (io, socket, roomId) => {
     const { vote, ...hostData } = room.host;
     room.host = hostData;
     room.guests = room.guests.map(({ vote, ...guestData }) => guestData);
-    io.sockets.emit('votesCleared', getRoomResponse(room));
+    socket.nsp.to(roomId).emit('votesCleared', getRoomResponse(room));
   }
 }
 
 /**
  * Used by guests to vote
- * @param {Object} io connection
  * @param {Object} socket connection
  * @param {String} roomId id of the room
  * @param {String} value voted value
  */
-const vote = (io, socket, { roomId, value }) => {
+const vote = (socket, { roomId, value }) => {
   const room = rooms[roomId];
   if (!room) {
     socket.emit('unexistingRoom');
@@ -54,7 +51,7 @@ const vote = (io, socket, { roomId, value }) => {
       const guest = room.guests.find(({ id }) => id === socket.id);
       guest.vote = value;
     }
-    io.sockets.emit('voted', getRoomResponse(room));
+    socket.nsp.to(roomId).emit('voted', getRoomResponse(room));
   }
 }
 
@@ -148,9 +145,9 @@ module.exports = (io) => {
     socket.on('createRoom', (params, callback) => createRoom(socket, params, callback));
     socket.on('joinRoom', (params, callback) => joinRoom(socket, params, callback));
     socket.on('leaveRoom', () => leaveRooms(socket));
-    socket.on('vote', (params) => vote(io, socket, params));
-    socket.on('clearVotes', (roomId) => clearVotes(io, socket, roomId));
-    socket.on('startSession', (roomId) => startSession(io, socket, roomId));
+    socket.on('vote', (params) => vote(socket, params));
+    socket.on('clearVotes', (roomId) => clearVotes(socket, roomId));
+    socket.on('startSession', (roomId) => startSession(socket, roomId));
     socket.on('disconnect', () => leaveRooms(socket));
   });
 };
