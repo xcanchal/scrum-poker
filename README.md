@@ -1,6 +1,6 @@
 # 🃏Scrum poker app
 
-Scrum poker application to be used in sprint plannings.
+Scrum poker application to be used in remote sprint plannings.
 
 ## Technologies
 
