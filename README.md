@@ -15,7 +15,7 @@ https://www.scrum-poker.app
 
 Usage example
 
-1. Create a room.
+1. Create a room, selecting the cards mode (either Fibonacci or T-shirt sizing).
 
 ![create a room](./readme-assets/create-room.png)
 
