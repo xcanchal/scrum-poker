@@ -4,26 +4,6 @@ import PropTypes from 'prop-types';
 import { StyledCardList, StyledCardListItem } from '../../components/card-list/';
 import StyledButton from '../../components/button';
 
-/*
-const getResults = (votes) => {
-  let results = {};
-
-  votes.forEach((vote) => {
-    if (!results[vote]) {
-      results[vote] = 1;
-    } else {
-      results[vote] += 1;
-    }
-  });
-
-  const [popular, ...otherVotes] = Object.entries(results)
-    .sort(([, sumA], [, sumB]) => sumB - sumA)
-    .map(([vote]) => vote)
-    .filter((vote) => vote);
-
-  return { popular, otherVotes };
-} */
-
 const HostView = ({
   className,
   room,
@@ -40,10 +20,6 @@ const HostView = ({
     const { vote = null } = room.guests.find(({ id }) => id === guestId);
     return vote;
   };
-  /* const { popular, otherVotes } = (guestsVoted && hostVoted) ?
-    getResults([room.host.vote, room.guests.map(({ vote }) => vote)]) :
-    { popular: null, otherVotes: [] }; */
-  /* console.log('{ popular, otherVotes }', { popular, otherVotes }); */
 
   return (
     <div className="component-host-view" className={`${className}`}>
@@ -53,7 +29,6 @@ const HostView = ({
         <StyledCardList>
           <div className="component-host-view__card-wrap">
             <StyledCardListItem
-              /* error={room.host.vote && otherVotes && otherVotes.includes(room.host.vote)} */
               disabled={!guestsVoted}
               revealed={allVoted}
               readOnly
@@ -66,7 +41,6 @@ const HostView = ({
           {room.guests.map(({ id, name, vote = '?' }) => (
             <div className="component-host-view__card-wrap" key={id}>
               <StyledCardListItem
-                /* error={vote && otherVotes && otherVotes.includes(vote)} */
                 disabled={!sessionStarted || !guestVoted(id)}
                 revealed={allVoted}
                 readOnly

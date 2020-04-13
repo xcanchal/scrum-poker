@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { ioUrl } from '../../config';
-import StyledInput from '../../components/input';
-import StyledButton from '../../components/button';
+import Input from '../../components/input';
+import Button from '../../components/button';
+import { Select, SelectOption } from '../../components/select';
 
 const Home = ({ className, history, io, socket, setSocket }) => {
   const [hostName, setHostName] = useState('');
   const [roomName, setRoomName] = useState('');
+  const [cardsMode, setCardsMode] = useState('');
 
   const onHostNameChange = ({ target: { value }}) => {
     setHostName(value);
@@ -16,6 +18,10 @@ const Home = ({ className, history, io, socket, setSocket }) => {
 
   const onRoomNameChange = ({ target: { value }}) => {
     setRoomName(value);
+  };
+
+  const onCardsModeChange = ({ target: { value }}) => {
+    setCardsMode(value);
   };
 
   const connect = async () => {
@@ -27,9 +33,15 @@ const Home = ({ className, history, io, socket, setSocket }) => {
     connect();
   }, []);
 
+  const canCreateRoom = !!roomName.length && !!hostName.length && !!cardsMode.length;
+
   const createRoom = async () => {
-    if (socket && !!roomName.length && !!hostName.length) {
-      socket.emit('createRoom', { hostName, roomName }, (room) => {
+    if (socket && canCreateRoom) {
+      socket.emit('createRoom', {
+        hostName,
+        roomName,
+        cardsMode
+      }, (room) => {
         history.push(`/room/${room.id}`, { room });
       });
     }
@@ -39,26 +51,33 @@ const Home = ({ className, history, io, socket, setSocket }) => {
     <div id="component-home" className={`${className} component-home`}>
       <h1>Create a room</h1>
       <div className="component-home__content">
-        <StyledInput
+        <Input
           className="component-home__input component-home__input__host-name"
           placeholder="Your name"
           onChange={onHostNameChange}
           value={hostName}
           size="lg"
           />
-        <StyledInput
+        <Input
           className="component-home__input component-home__input__room-name"
           placeholder="Room name"
           onChange={onRoomNameChange}
           value={roomName}
           size="lg"
           />
-        <StyledButton
+        <Select value={cardsMode} onChange={onCardsModeChange} size="lg">
+          <SelectOption value="">Select an option</SelectOption>
+          <SelectOption value="fibonacci">Fibonacci (1, 2, 3, 5...)</SelectOption>
+          <SelectOption value="t-shirt-size">T-shirt size (xs, s, m...)</SelectOption>
+        </Select>
+        <Button
           className="component-home__button"
           onClick={createRoom}
-          size="lg">
+          disabled={!canCreateRoom}
+          size="lg"
+          >
             Create room
-          </StyledButton>
+          </Button>
       </div>
     </div>
   );

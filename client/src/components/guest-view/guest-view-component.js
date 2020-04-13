@@ -2,15 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledCardList, StyledCardListItem } from '../../components/card-list/';
-
-const cardValues = ['1', '2', '3', '5', '8', '13', '21', '34', '?', '☕'];
+import cards from '../../constants/cards';
 
 const GuestView = ({ className, room, vote, votedValue, sessionStarted }) => (
   <div className="component-guest-view" className={`${className}`}>
     <h2>{room.name}</h2>
     {sessionStarted ? (
       <StyledCardList>
-        {cardValues.map((value) => (
+        {cards[room.cardsMode].map((value) => (
           <div className="component-guest-view__card-wrap" key={value}>
             <StyledCardListItem
               selected={(votedValue && value) && votedValue === value}
