@@ -19,8 +19,10 @@ const Join = ({ className, history }) => {
     setGuestName(value);
   };
 
+  const validGuestName = guestName.length > 0;
+
   const joinRoom = async () => {
-    if (guestName.length > 1) {
+    if (validGuestName) {
       history.push(`/room/${roomId}`, { guestName });
     }
   };
@@ -40,6 +42,7 @@ const Join = ({ className, history }) => {
           className="component-join__button"
           onClick={joinRoom}
           size="lg"
+          disabled={!validGuestName}
         >
           Join
         </StyledButton>

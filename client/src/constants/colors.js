@@ -5,6 +5,7 @@ module.exports = {
   greyLighter: '#eee',
   greyDarker: '#444',
   // backgrounds
+  backgroundLight: '#3a3a4a',
   background: '#1f1f29',
   backgroundDark: '#191921',
   backgroundDarker: '#191921',

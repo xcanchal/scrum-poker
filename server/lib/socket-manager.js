@@ -122,10 +122,11 @@ const joinRoom = (socket, { roomId, guestName }, callback) => {
  * @param {String} roomName name of the room
  * @param {Function} callback function
  */
-const createRoom = (socket, { hostName, roomName }, callback) => {
+const createRoom = (socket, { hostName, roomName, cardsMode }, callback) => {
   const room = {
     id: uuid(),
     name: roomName,
+    cardsMode,
     host: {
       id: socket.id,
       name: hostName,

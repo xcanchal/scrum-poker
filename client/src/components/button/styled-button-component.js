@@ -7,8 +7,6 @@ export default styled(Button)`
   border: none;
   box-shadow: none;
   background: ${Colors.primary};
-  border: 1px solid #DDD;
-  border: none;
   border-radius: 4px;
   font-size: 1rem;
   padding: 12px 20px;
@@ -23,17 +21,22 @@ export default styled(Button)`
     background: ${Colors.primaryLight};
   }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(15, 206, 113, 0.3);
-  }
-
   ${({ size }) => size === 'lg' && `
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     padding: 20px 24px;
   `}
 
   ${({ size }) => size === 'sm' && `
     padding: 8px 16px;
+  `}
+
+  ${({ disabled }) => disabled && `
+    cursor: default;
+    pointer-events: none;
+    background-color: ${Colors.backgroundLight};
+
+    &:focus {
+      box-shadow: none;
+    }
   `}
 `;

@@ -32,6 +32,7 @@ const GlobalStyles = css`
   a {
     color: ${Colors.primaryText};
     transition: all 0.3s;
+    text-decoration: none;
   }
 
   a:hover, a:active {
@@ -51,6 +52,13 @@ const GlobalStyles = css`
     padding: 100px 24px 24px 24px;
     height: calc(100vh - 100px);
     min-height: 500px;
+  }
+
+  * {
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15, 206, 113, 0.3);
+    }
   }
 `;
 
