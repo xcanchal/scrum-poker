@@ -66,7 +66,7 @@ const Home = ({ className, history, io, socket, setSocket }) => {
           size="lg"
           />
         <Select value={cardsMode} onChange={onCardsModeChange} size="lg">
-          <SelectOption value="">Select an option</SelectOption>
+          <SelectOption value="">Cards mode</SelectOption>
           <SelectOption value="fibonacci">Fibonacci (1, 2, 3, 5...)</SelectOption>
           <SelectOption value="t-shirt-size">T-shirt size (xs, s, m...)</SelectOption>
         </Select>
