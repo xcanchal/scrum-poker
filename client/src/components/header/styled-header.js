@@ -12,8 +12,16 @@ export default styled(Header)`
   background-color: ${Colors.background};
 
   #scrum-poker-logo a {
-    font-size: 1.5rem;
+    display: flex;
     text-decoration: none;
-    color: ${Colors.white};
+    width: 200px;
+
+    &:focus {
+      outline: none;
+    }
+
+    img {
+      width: 100%;
+    }
   }
 `;
