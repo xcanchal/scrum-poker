@@ -23,12 +23,27 @@ module.exports = () => ({
   },
   plugins: [
     new Dotenv(),
-    new HtmlWebpackPlugin({ template: `${src}/index.html` }),
+    new HtmlWebpackPlugin({
+      template: `${src}/index.html`,
+      favicon: './assets/favicon.ico',
+    }),
     new CleanWebpackPlugin(),
   ],
   module: {
     rules: [
-      { test: /\.js$/, use: { loader: 'babel-loader' } },
+      {
+        test: /\.js$/,
+        use: { loader: 'babel-loader' }
+      },
+      {
+        test: /\.(ico|jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'assets/',
+          publicPath: '/assets/',
+        },
+      },
     ],
   },
   optimization: {
