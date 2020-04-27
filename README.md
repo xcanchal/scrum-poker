@@ -1,4 +1,4 @@
-# 🃏Scrum poker app
+![Scrum poker](./client/assets/logo.png)
 
 Scrum poker application to be used in remote sprint plannings.
 
