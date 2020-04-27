@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const validChild = 'SelectOption';
+import SelectOption from './select-option/select-option-component';
 
 const Select = ({
   id,
@@ -23,8 +22,8 @@ Select.propTypes = {
   children: (props, propName) => {
     const { [propName]: prop } = props;
     const children = React.Children.toArray(prop);
-    if (children.some((child) => child.type.name !== validChild)) {
-      return new Error(`"Select" children must be of type ${validChild}`);
+    if (children.some((child) => child.type !== SelectOption)) {
+      return new Error(`"Select" children must be of type "SelectOption"`);
     }
     return null;
   }
