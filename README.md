@@ -1,4 +1,4 @@
-![Scrum poker](./client/assets/logo.png)
+![Scrum poker](./readme-assets/logo-bg.png)
 
 Scrum poker application to be used in remote sprint plannings.
 
