@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 
 // import db from '../../lib/database';
 // import { GET } from '../../api';
-
 import { setRoom } from '../../reducer/actions';
 import { useGlobalState } from '../../context/global-state';
 import { useSocket } from '../../context/socket';
+import Layout from '../../components/layout';
 import HostView from '../../components/host-view';
 import GuestView from '../../components/guest-view';
 
@@ -148,9 +148,11 @@ export default function Room({ className }) {
 
   return (socket && room.id) ? (
     <div id="room-component" className={`${className}`}>
-      <div className="component-room__content">
-        {ViewComponent}
-      </div>
+      <Layout>
+        <div className="component-room__content">
+          {ViewComponent}
+        </div>
+      </Layout>
     </div>
   ) : null;
 }

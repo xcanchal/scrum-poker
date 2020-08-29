@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 import { useGlobalState } from '../../context/global-state';
 import { setRoom } from '../../reducer/actions';
+import Layout from '../../components/layout';
 import StyledInput from '../../components/input';
 import StyledButton from '../../components/button';
 import { useSocket } from '../../context/socket';
@@ -48,24 +49,26 @@ const Join = ({ className }) => {
 
   return (
     <div id="component-join" className={`${className}`}>
-      <h1>Join room</h1>
-      <div className="component-join__content">
-        <StyledInput
-          className="component-join__input component-home__input__host-name"
-          placeholder="Your name"
-          onChange={onGuestChangeName}
-          value={guestName}
-          size="lg"
-        />
-        <StyledButton
-          className="component-join__button"
-          onClick={joinRoom}
-          size="lg"
-          disabled={!isValidGuestName}
-        >
-          Join
-        </StyledButton>
-      </div>
+      <Layout>
+        <h1>Join room</h1>
+        <div className="component-join__content">
+          <StyledInput
+            className="component-join__input component-home__input__host-name"
+            placeholder="Your name"
+            onChange={onGuestChangeName}
+            value={guestName}
+            size="lg"
+          />
+          <StyledButton
+            className="component-join__button"
+            onClick={joinRoom}
+            size="lg"
+            disabled={!isValidGuestName}
+          >
+            Join
+          </StyledButton>
+        </div>
+      </Layout>
     </div>
   );
 };

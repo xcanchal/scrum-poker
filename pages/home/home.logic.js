@@ -61,7 +61,7 @@ const Home = ({ className }) => {
             className="component-home__input component-home__input__host-name"
             placeholder="Your name"
             onChange={({ target: { value } }) => updateState('host', { name: value })}
-            value={room.host.name}
+            value={room && room.host ? room.host.name : null}
             size="lg"
           />
           <Input

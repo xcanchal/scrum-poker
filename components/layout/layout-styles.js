@@ -7,18 +7,20 @@ export default () => css`
   width: 100%;
   align-items: center;
 
-  .layout-container {
+  .layout__container {
     width: 100%;
     max-width: 612px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    text-align: center;
 
     main {
-      padding-top: 40px;
       display: flex;
+      flex-direction: column;
       flex: 1;
+      align-items: center;
 
       section {
         width: 100%;
