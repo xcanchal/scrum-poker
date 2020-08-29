@@ -1,8 +1,12 @@
-import { useState, useMemo } from 'react';
+import {
+  useState, useMemo, useEffect, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import { useSocket } from '../../context/socket';
 
+import { useSocket } from '../../context/socket';
+import { useGlobalState } from '../../context/global-state';
+import { setRoom, updateRoom } from '../../reducer/actions';
 import Layout from '../../components/layout';
 import HtmlHead from '../../components/html-head';
 import Input from '../../components/input';
@@ -12,29 +16,40 @@ import { Select, SelectOption } from '../../components/select';
 const Home = ({ className }) => {
   const router = useRouter();
   const socket = useSocket();
-  console.log('home socket', socket);
-  const [room, setRoom] = useState({
-    hostName: '',
-    roomName: '',
-    cardsMode: '',
-  });
+  const [listenersReady, setListenersReady] = useState(false);
+  const [{ room }, dispatch] = useGlobalState();
 
-  const updateState = (field, value) => {
-    setRoom({ ...room, [field]: value });
-  };
+  const updateState = useCallback((field, value) => {
+    dispatch(updateRoom({ [field]: value }));
+  }, [dispatch]);
 
   const canCreateRoom = useMemo(() => {
-    const { roomName, hostName, cardsMode } = room;
-    return !!roomName.length && !!hostName.length && !!cardsMode.length;
+    const { name, host, cardsMode } = room;
+    return !!name && !!host.name && !!cardsMode;
   }, [room]);
 
-  const createRoom = () => {
+  const createRoom = useCallback(() => {
     if (socket && canCreateRoom) {
-      socket.emit('createRoom', room, (createdRoom) => {
-        router.push(`/room/${createdRoom.id}`);
-      });
+      socket.emit('createRoom', room);
     }
-  };
+  }, [socket, room, canCreateRoom]);
+
+  const onRoomCreated = useCallback((createdRoom) => {
+    dispatch(setRoom(createdRoom));
+    socket.emit('joinRoom', { id: createdRoom.id });
+  }, [socket, dispatch]);
+
+  const onJoinedRoom = useCallback(({ id }) => {
+    router.push(`/room?id=${id}`);
+  }, [router]);
+
+  useEffect(() => {
+    if (socket && !listenersReady) {
+      socket.on('roomCreated', onRoomCreated);
+      socket.on('guestJoined', onJoinedRoom);
+      setListenersReady(true);
+    }
+  }, [socket, listenersReady, onRoomCreated, onJoinedRoom]);
 
   return (
     <div id="component-home" className={`${className} component-home`}>
@@ -45,15 +60,15 @@ const Home = ({ className }) => {
           <Input
             className="component-home__input component-home__input__host-name"
             placeholder="Your name"
-            onChange={({ target: { value } }) => updateState('hostName', value)}
-            value={room.hostName}
+            onChange={({ target: { value } }) => updateState('host', { name: value })}
+            value={room.host.name}
             size="lg"
           />
           <Input
             className="component-home__input component-home__input__room-name"
             placeholder="Room name"
-            onChange={({ target: { value } }) => updateState('roomName', value)}
-            value={room.roomName}
+            onChange={({ target: { value } }) => updateState('name', value)}
+            value={room.name}
             size="lg"
           />
           <Select

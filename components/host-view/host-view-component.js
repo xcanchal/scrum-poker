@@ -14,7 +14,7 @@ const HostView = ({
   startSession,
   sessionStarted,
 }) => {
-  const inviteLink = `${process.env.NEXT_PUBLIC_HOST}/join/${room.id}`;
+  const inviteLink = `${process.env.NEXT_PUBLIC_HOST}/join?id=${room.id}`;
   const allVoted = guestsVoted && hostVoted;
   const guestVoted = (guestId) => {
     const { vote = null } = room.guests.find(({ id }) => id === guestId);

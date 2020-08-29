@@ -17,7 +17,7 @@ export const fetchRequest = async (endpoint, options = {}) => {
   }
 
   let data = await response.text();
-  console.log('data', data);
+
   try {
     data = JSON.parse(data);
     return data;

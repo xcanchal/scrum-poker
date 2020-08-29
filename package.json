@@ -12,7 +12,6 @@
     "camelcase": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "lowdb": "^1.0.0",
     "next": "latest",
     "prop-types": "^15.7.2",
     "react": "^16.8.0",
