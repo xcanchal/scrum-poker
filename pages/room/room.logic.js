@@ -23,7 +23,7 @@ export default function Room({ className }) {
   const [votedValue, setVotedValue] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!room.id) {
       const { id: roomId = null } = router.query;
 
@@ -32,19 +32,19 @@ export default function Room({ className }) {
         router.push('/');
       } else {
         // TODO: Implement retrieve room
-        /* console.log('missing room, requesting');
+        console.log('missing room, requesting');
         (async () => {
           const roomData = await GET(`/api/rooms/${roomId}`);
           console.log('roomData', roomData);
           dispatch(setRoom(roomData));
-        })(); */
+        })();
       }
     }
-  }, [router, room, dispatch]);
+  }, [router, room, dispatch]); */
 
   const kickGuestOut = useCallback((reason) => {
     alert(reason);
-    router.replace('/session-end', { reason });
+    router.replace('/unexisting-room', { reason });
   }, [router]);
 
   const onGuestJoin = useCallback((updatedRoom) => {
@@ -84,17 +84,6 @@ export default function Room({ className }) {
     }
   }, [socket, dispatch, onVoted, onVotesCleared, kickGuestOut, listenersReady, onGuestJoin]);
 
-  useEffect(() => {
-    if (socket) {
-      if (!listenersReady) {
-        addListeners();
-      }
-    }
-    /* return () => {
-        socket.emit('leaveRoom');
-      }; */
-  }, [socket, addListeners, listenersReady]);
-
   const vote = useCallback((value) => {
     setVotedValue(value);
     socket.emit('vote', { roomId: room.id, value });
@@ -108,7 +97,27 @@ export default function Room({ className }) {
     socket.emit('startSession', room.id);
   }, [socket, room]);
 
+  useEffect(() => {
+    if (!room.id) {
+      router.push('/');
+      return;
+    }
+
+    if (socket) {
+      if (!listenersReady) {
+        addListeners();
+      }
+    }
+    /* return () => {
+        socket.emit('leaveRoom');
+      }; */
+  }, [socket, router, room.id, addListeners, listenersReady]);
+
   const ViewComponent = useMemo(() => {
+    if (!socket || !room.id) {
+      return null;
+    }
+
     const isHost = socket.id === room.host.id;
 
     const GuestComponent = (

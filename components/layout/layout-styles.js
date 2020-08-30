@@ -9,11 +9,11 @@ export default () => css`
 
   .layout__container {
     width: 100%;
-    max-width: 612px;
+    max-width: 1024px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: calc(100vh - 100px);
     text-align: center;
 
     main {
@@ -31,7 +31,6 @@ export default () => css`
   @media (max-width: 679px) {
     .layout-container {
       background-color: var(--color-white);
-      min-height: 100vh;
       max-width: none;
 
       main {

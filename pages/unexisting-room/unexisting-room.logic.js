@@ -7,7 +7,7 @@ import { useGlobalState } from '../../context/global-state';
 import { setRoom } from '../../reducer/actions';
 import Layout from '../../components/layout';
 
-const SessionEnd = ({ className }) => {
+const UnexistingRoom = ({ className }) => {
   const [{ room }, dispatch] = useGlobalState();
 
   useEffect(() => {
@@ -17,10 +17,10 @@ const SessionEnd = ({ className }) => {
   }, [dispatch, room.id]);
 
   return (
-    <div id="component-session-end" className={className}>
+    <div id="component-unexisting-room" className={className}>
       <Layout>
-        <div className="component-session-end__content">
-          <h1>Session ended</h1>
+        <div className="component-unexisting-room__content">
+          <h1>Unexisting room</h1>
           <p>
             Request a valid link or
             {' '}
@@ -31,12 +31,12 @@ const SessionEnd = ({ className }) => {
       </Layout>
     </div>
   );
-}
+};
 
-SessionEnd.propTypes = {
+UnexistingRoom.propTypes = {
   className: PropTypes.string.isRequired,
 };
 
-SessionEnd.defaultProps = {};
+UnexistingRoom.defaultProps = {};
 
-export default SessionEnd;
+export default UnexistingRoom;

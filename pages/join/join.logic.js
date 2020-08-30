@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { useGlobalState } from '../../context/global-state';
 import { setRoom } from '../../reducer/actions';
@@ -40,12 +41,17 @@ const Join = ({ className }) => {
     router.push(`/room?id=${joinedRoom.id}`);
   }, [router, dispatch]);
 
+  const onUnexistingRoom = useCallback(() => {
+    router.push('/unexisting-room');
+  }, [router]);
+
   useEffect(() => {
     if (socket && !listenersReady) {
       socket.on('guestJoined', onJoinedRoom);
+      socket.on('unexistingRoom', onUnexistingRoom);
       setListenersReady(true);
     }
-  }, [socket, listenersReady, onJoinedRoom]);
+  }, [socket, listenersReady, onJoinedRoom, onUnexistingRoom]);
 
   return (
     <div id="component-join" className={`${className}`}>
@@ -67,6 +73,12 @@ const Join = ({ className }) => {
           >
             Join
           </StyledButton>
+          <p>
+            Or if you prefer,
+            {' '}
+            <Link href="/">create a new room</Link>
+            .
+          </p>
         </div>
       </Layout>
     </div>

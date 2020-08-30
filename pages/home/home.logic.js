@@ -61,14 +61,14 @@ const Home = ({ className }) => {
             className="component-home__input component-home__input__host-name"
             placeholder="Your name"
             onChange={({ target: { value } }) => updateState('host', { name: value })}
-            value={room && room.host ? room.host.name : null}
+            value={room && room.host ? room.host.name : ''}
             size="lg"
           />
           <Input
             className="component-home__input component-home__input__room-name"
             placeholder="Room name"
             onChange={({ target: { value } }) => updateState('name', value)}
-            value={room.name}
+            value={room.name || ''}
             size="lg"
           />
           <Select
