@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-export default () => css`
+const layoutStyles = () => css`
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -39,3 +39,5 @@ export default () => css`
     }
   }
 `;
+
+export default layoutStyles;

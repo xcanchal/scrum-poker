@@ -2,7 +2,7 @@ import { css } from 'styled-components';
 
 import Colors from '../../constants/colors';
 
-export default () => css`
+const headerStyles = () => css`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,3 +22,5 @@ export default () => css`
     }
   }
 `;
+
+export default headerStyles;

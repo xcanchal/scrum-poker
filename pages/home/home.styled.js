@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-export default () => css`
+const homeStyles = () => css`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,3 +20,5 @@ export default () => css`
     display: flex;
   }
 `;
+
+export default homeStyles;
