@@ -1,5 +1,5 @@
 {
-  "name": "with-styled-components",
+  "name": "scrum-poker-next",
   "version": "1.0.0",
   "scripts": {
     "dev": "node server.js",
