@@ -11,7 +11,10 @@ export default function HtmlHead({ title }) {
   return (
     <Head>
       <title>{title}</title>
-      <link rel="icon" href="/favicon.png" />
+      <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+      <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+      <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+      <link rel="icon" href="/favicon-196x196.png" type="image/png" sizes="196x196" />
       <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
       <meta name="description" content="Scrum Poker application. Sprint planning poker application with realtime communication. Estimate your sprint remotely with ease." />
       <meta name="keywords" content="scrum poker, planning poker, scrum, agile, sprint planning, remote sprint planning" />
