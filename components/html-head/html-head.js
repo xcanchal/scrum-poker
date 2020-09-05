@@ -19,6 +19,7 @@ export default function HtmlHead({ title }) {
       <meta name="description" content="Scrum Poker application. Sprint planning poker application with realtime communication. Estimate your sprint remotely with ease." />
       <meta name="keywords" content="scrum poker, planning poker, scrum, agile, sprint planning, remote sprint planning" />
       <meta name="author" content="Xavier Canchal" />
+      <script data-ad-client="ca-pub-8058549971429775" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
     </Head>
   );
 }
