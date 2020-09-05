@@ -4,7 +4,6 @@ const socketIo = require('socket.io');
 const next = require('next');
 // const cors = require('cors');
 
-// const db = require('./lib/database');
 const socketManager = require('./lib/socket-manager');
 
 const port = process.env.PORT || 3000;

@@ -2,9 +2,9 @@ import { SET_ROOM, UPDATE_ROOM } from './action-types';
 
 export const initialState = {
   room: {
-    name: null,
-    host: { id: null, name: null },
-    cardsMode: null,
+    name: '',
+    host: { id: null, name: '' },
+    cardsMode: '',
     guests: [],
   },
 };
@@ -14,15 +14,13 @@ export const setRoom = (state, { room }) => ({
   room,
 });
 
-export const updateRoom = (state, { updates }) => {
-  return {
-    ...state,
-    room: {
-      ...state.room,
-      ...updates,
-    },
-  };
-};
+export const updateRoom = (state, { updates }) => ({
+  ...state,
+  room: {
+    ...state.room,
+    ...updates,
+  },
+});
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {

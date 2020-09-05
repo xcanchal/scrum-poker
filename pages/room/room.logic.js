@@ -173,14 +173,3 @@ Room.propTypes = {
 Room.defaultProps = {
   className: '',
 };
-
-/* export async function getServerSideProps({ params }) {
-  /* let room = null;
-  if (params.id) {
-    room = await GET(`${process.env.NEXT_PUBLIC_HOST}/api/rooms/${params.id}`);
-  }
-  console.log('client db', db);
-  const room = db.get('rooms', params.id);
-  console.log('client room', room);
-  return { props: { room } };
-} */

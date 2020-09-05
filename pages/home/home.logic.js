@@ -25,7 +25,7 @@ const Home = ({ className }) => {
 
   const canCreateRoom = useMemo(() => {
     const { name, host, cardsMode } = room;
-    return !!name && !!host.name && !!cardsMode;
+    return !!name.length && !!host.name.length && !!cardsMode.length;
   }, [room]);
 
   const createRoom = useCallback(() => {
@@ -61,14 +61,14 @@ const Home = ({ className }) => {
             className="component-home__input component-home__input__host-name"
             placeholder="Your name"
             onChange={({ target: { value } }) => updateState('host', { name: value })}
-            value={room && room.host ? room.host.name : ''}
+            value={room.host.name}
             size="lg"
           />
           <Input
             className="component-home__input component-home__input__room-name"
             placeholder="Room name"
             onChange={({ target: { value } }) => updateState('name', value)}
-            value={room.name || ''}
+            value={room.name}
             size="lg"
           />
           <Select
@@ -78,7 +78,7 @@ const Home = ({ className }) => {
           >
             <SelectOption value="">Cards mode</SelectOption>
             <SelectOption value="fibonacci">Fibonacci (1, 2, 3, 5...)</SelectOption>
-            <SelectOption value="t-shirt-size">T-shirt size (xs, s, m...)</SelectOption>
+            <SelectOption value="tShirtSize">T-shirt size (xs, s, m...)</SelectOption>
           </Select>
           <Button
             className="component-home__button"

@@ -15,14 +15,12 @@ const GlobalStateProvider = ({ children, reducer, initialState }) => {
 
 GlobalStateProvider.propTypes = {
   children: PropTypes.node,
-  reducer: PropTypes.func,
-  initialState: PropTypes.shape,
+  reducer: PropTypes.func.isRequired,
+  initialState: PropTypes.shape.isRequired,
 };
 
 GlobalStateProvider.defaultProps = {
   children: null,
-  reducer: () => {},
-  initialState: {},
 };
 
 export default GlobalStateProvider;
