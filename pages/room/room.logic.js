@@ -4,12 +4,11 @@ import React, {
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
-// import db from '../../lib/database';
-// import { GET } from '../../api';
 import { setRoom } from '../../reducer/actions';
 import { useGlobalState } from '../../context/global-state';
 import { useSocket } from '../../context/socket';
 import Layout from '../../components/layout';
+import HtmlHead from '../../components/html-head';
 import HostView from '../../components/host-view';
 import GuestView from '../../components/guest-view';
 
@@ -22,25 +21,6 @@ export default function Room({ className }) {
   const [hostVoted, setHostVoted] = useState(false);
   const [votedValue, setVotedValue] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
-
-  /* useEffect(() => {
-    if (!room.id) {
-      const { id: roomId = null } = router.query;
-
-      if (!roomId) {
-        alert('invalid URL');
-        router.push('/');
-      } else {
-        // TODO: Implement retrieve room
-        console.log('missing room, requesting');
-        (async () => {
-          const roomData = await GET(`/api/rooms/${roomId}`);
-          console.log('roomData', roomData);
-          dispatch(setRoom(roomData));
-        })();
-      }
-    }
-  }, [router, room, dispatch]); */
 
   const kickGuestOut = useCallback((reason) => {
     alert(reason);
@@ -158,6 +138,7 @@ export default function Room({ className }) {
   return (socket && room.id) ? (
     <div id="room-component" className={`${className}`}>
       <Layout>
+        <HtmlHead title="Scrum poker - Room" />
         <div className="component-room__content">
           {ViewComponent}
         </div>

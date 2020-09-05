@@ -2,6 +2,7 @@ import { SET_ROOM, UPDATE_ROOM } from './action-types';
 
 export const initialState = {
   room: {
+    id: null,
     name: '',
     host: { id: null, name: '' },
     cardsMode: '',

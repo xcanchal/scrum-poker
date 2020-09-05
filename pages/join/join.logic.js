@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useGlobalState } from '../../context/global-state';
 import { setRoom } from '../../reducer/actions';
 import Layout from '../../components/layout';
+import HtmlHead from '../../components/html-head';
 import StyledInput from '../../components/input';
 import StyledButton from '../../components/button';
 import { useSocket } from '../../context/socket';
@@ -56,6 +57,7 @@ const Join = ({ className }) => {
   return (
     <div id="component-join" className={`${className}`}>
       <Layout>
+        <HtmlHead title="Scrum poker - Join" />
         <h1>Join room</h1>
         <div className="component-join__content">
           <StyledInput
