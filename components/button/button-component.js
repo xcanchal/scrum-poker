@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Button = ({
-  type,
-  onClick,
-  id,
-  className,
-  children,
-}) => (
+/* eslint-disable react/jsx-props-no-spreading */
+
+const Button = ({ onClick, className, children }) => (
   <button
-    {...(id ? { id } : {})}
     className={`${className}`}
-    type={type}
+    type="button"
     onClick={onClick}
   >
     {children}
@@ -19,22 +14,18 @@ const Button = ({
 );
 
 Button.propTypes = {
-  type: PropTypes.string,
-  placeholder: PropTypes.string,
-  value: PropTypes.string,
-  onClick: PropTypes.func,
-  id: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.string,
+  onClick: PropTypes.func,
+  // eslint-disable-next-line react/no-unused-prop-types
+  size: PropTypes.oneOf(['md', 'lg']),
 };
 
 Button.defaultProps = {
-  type: 'button',
-  value: '',
-  onClick: () => {},
   className: '',
-  size: 'md',
   children: 'click me',
+  onClick: () => {},
+  size: 'md',
 };
 
 export default Button;
