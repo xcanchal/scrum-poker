@@ -1,0 +1,28 @@
+extends:
+  - 'airbnb'
+  - 'airbnb/hooks'
+
+parser: 'babel-eslint'
+parserOptions:
+  sourceType: 'module'
+  allowImportExportEverywhere: true
+
+plugins:
+  - 'react'
+  - 'react-hooks'
+  - 'import'
+  - 'jsx-a11y'
+  - 'better-styled-components'
+
+globals:
+  fetch: true
+
+rules:
+  react/react-in-jsx-scope: 'off'
+  react/jsx-filename-extension: 'off'
+  global-require: 'off'
+  jsx-a11y/anchor-is-valid: ['error', { components: ['Link'] }]
+  template-curly-spacing: 'off'
+  indent: ['error', 2, { ignoredNodes: ['TemplateLiteral'] }]
+
+root: true
