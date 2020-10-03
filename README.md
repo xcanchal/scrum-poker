@@ -4,7 +4,7 @@ Realtime Scrum poker application to be used in remote sprint plannings. Built wi
 
 ## Live site
 
-https://www.scrum-poker.app
+https://www.the-scrum-poker.online
 
 ## How to use it
 
