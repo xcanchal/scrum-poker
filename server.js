@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
   const server = http.Server(app);
 
   const io = socketIo(server);
-  socketManager(io, { reconnectionAttempts: 3 });
+  socketManager(io);
 
   const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
   const nextHandle = nextApp.getRequestHandler();
