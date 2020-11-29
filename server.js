@@ -11,7 +11,12 @@ const port = process.env.PORT || 3000;
   const app = express();
   const server = http.Server(app);
 
-  const io = socketIo(server);
+  const io = socketIo(server, {
+    cors: {
+      origin: process.env.NEXT_PUBLIC_HOST,
+      methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH'],
+    },
+  });
   io.on('connection', (socket) => {
     registerSubscriptions(socket);
   });
