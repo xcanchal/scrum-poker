@@ -14,7 +14,12 @@ const port = process.env.PORT || 3000;
 
   const server = http.Server(app);
 
-  const io = socketIo(server);
+  const io = socketIo(server, {
+    cors: {
+      origin: process.env.NODE_ENV === 'production' ? 'https://www.the-scrum-poker.online' : '*',
+      methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH'],
+    },
+  });
   io.on('connection', (socket) => {
     registerSubscriptions(socket);
   });
