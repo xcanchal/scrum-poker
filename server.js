@@ -16,7 +16,7 @@ const port = process.env.PORT || 3000;
 
   const io = socketIo(server, {
     cors: {
-      origin: process.env.NODE_ENV === 'production' ? 'https://www.the-scrum-poker.online' : '*',
+      origin: process.env.NODE_ENV === 'production' ? 'https://the-scrum-poker.online' : '*',
       methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH'],
     },
   });
