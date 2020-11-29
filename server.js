@@ -14,8 +14,6 @@ const port = process.env.PORT || 3000;
 
   const server = http.Server(app);
 
-  console.log(process.env.NEXT_PUBLIC_HOST);
-
   const io = socketIo(server, {
     cors: {
       origin: process.env.NODE_ENV === 'production' ? 'https://www.the-scrum-poker.online' : '*',
