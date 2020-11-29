@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
+import { useSocket } from '../../context/socket';
 import { StyledCardList, StyledCardListItem } from '../card-list';
 import Button from '../button';
 
@@ -14,12 +15,24 @@ const HostView = ({
   startSession,
   sessionStarted,
 }) => {
+  const socket = useSocket();
   const inviteLink = `${process.env.NEXT_PUBLIC_HOST}/join?id=${room.id}`;
   const allVoted = guestsVoted && hostVoted;
-  const guestVoted = (guestId) => {
+
+  const guestVoted = useCallback((guestId) => {
     const { vote = null } = room.guests.find(({ id }) => id === guestId);
     return vote;
-  };
+  }, [room.guests]);
+
+  const kickGuestOut = useCallback((guestId) => {
+    socket.emit('kickGuestOut', { roomId: room.id, guestId });
+  }, [socket, room]);
+
+  const onGuestRemovalClick = useCallback(({ id, name }) => {
+    if (window.confirm(`Do you really want to kick "${name}" out?`)) {
+      kickGuestOut(id);
+    }
+  }, [kickGuestOut]);
 
   return (
     <div className={`${className} component-host-view`}>
@@ -54,8 +67,14 @@ const HostView = ({
                 readOnly
               >
                 <span>{allVoted ? vote : '?'}</span>
-                {!sessionStarted && <small>Session not started</small>}
               </StyledCardListItem>
+              <button
+                className="kick-guest-button"
+                onClick={() => onGuestRemovalClick({ id, name })}
+                type="button"
+              >
+                x
+              </button>
               <span>{name}</span>
             </div>
           ))}

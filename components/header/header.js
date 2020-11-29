@@ -5,7 +5,9 @@ import Link from 'next/link';
 const Header = ({ className }) => (
   <div className={className}>
     <div className="header__logo">
-      <Link href="/"><img src="/images/logo.png" alt="logo" /></Link>
+      <Link href="/">
+        <img src="/images/logo.png" alt="logo" />
+      </Link>
     </div>
   </div>
 );
