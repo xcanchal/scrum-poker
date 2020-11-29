@@ -20,7 +20,7 @@ export default function Layout({ children, className }) {
 }
 
 Layout.propTypes = {
-  children: PropTypes.oneOf([PropTypes.node, PropTypes.func]),
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   className: PropTypes.string.isRequired,
 };
 

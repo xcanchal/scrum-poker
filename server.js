@@ -3,7 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const next = require('next');
 
-const socketManager = require('./lib/socket-manager');
+const registerSubscriptions = require('./lib/subscriptions');
 
 const port = process.env.PORT || 3000;
 
@@ -12,7 +12,9 @@ const port = process.env.PORT || 3000;
   const server = http.Server(app);
 
   const io = socketIo(server);
-  socketManager(io);
+  io.on('connection', (socket) => {
+    registerSubscriptions(socket);
+  });
 
   const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
   const nextHandle = nextApp.getRequestHandler();

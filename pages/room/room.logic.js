@@ -22,6 +22,10 @@ export default function Room({ className }) {
   const [votedValue, setVotedValue] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
 
+  const updateRoom = useCallback((updatedRoom) => {
+    dispatch(setRoom(updatedRoom));
+  }, [dispatch]);
+
   const kickGuestOut = useCallback((reason) => {
     alert(reason);
     router.replace('/unexisting-room', { reason });
@@ -55,14 +59,18 @@ export default function Room({ className }) {
     if (socket && !listenersReady) {
       socket.on('unexistingRoom', () => kickGuestOut('The room does no longer exist'));
       socket.on('guestJoined', onGuestJoin);
-      socket.on('guestLeft', (newRoom) => dispatch(setRoom(newRoom)));
+      socket.on('guestLeft', updateRoom);
       socket.on('hostLeft', () => kickGuestOut('The host has ended the session'));
       socket.on('voted', onVoted);
       socket.on('votesCleared', onVotesCleared);
       socket.on('sessionStarted', () => setSessionStarted(true));
+      socket.on('guestKickedOut', updateRoom);
       setListenersReady(true);
     }
-  }, [socket, dispatch, onVoted, onVotesCleared, kickGuestOut, listenersReady, onGuestJoin]);
+  }, [
+    socket, onVoted, onVotesCleared, kickGuestOut,
+    listenersReady, onGuestJoin, updateRoom,
+  ]);
 
   const vote = useCallback((value) => {
     setVotedValue(value);
@@ -83,14 +91,9 @@ export default function Room({ className }) {
       return;
     }
 
-    if (socket) {
-      if (!listenersReady) {
-        addListeners();
-      }
+    if (socket && !listenersReady) {
+      addListeners();
     }
-    /* return () => {
-        socket.emit('leaveRoom');
-      }; */
   }, [socket, router, room.id, addListeners, listenersReady]);
 
   const ViewComponent = useMemo(() => {

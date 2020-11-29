@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const CardList = ({ children, className }) => (
-  <div className="card-list-component" className={`${className}`}>
+  <div className={`${className} card-list-component`}>
     {children}
   </div>
 );
