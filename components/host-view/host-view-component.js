@@ -83,7 +83,15 @@ const HostView = ({
 
 HostView.propTypes = {
   className: PropTypes.string.isRequired,
-  room: PropTypes.shape,
+  room: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    guests: PropTypes.arrayOf(PropTypes.shape({})),
+    host: PropTypes.shape({
+      name: PropTypes.string,
+      vote: PropTypes.string,
+    }),
+  }),
   isHost: PropTypes.bool.isRequired,
   guestsVoted: PropTypes.bool.isRequired,
   hostVoted: PropTypes.bool.isRequired,

@@ -30,7 +30,10 @@ const GuestView = ({
 
 GuestView.propTypes = {
   className: PropTypes.string.isRequired,
-  room: PropTypes.shape,
+  room: PropTypes.shape({
+    name: PropTypes.string,
+    cardsMode: PropTypes.string,
+  }),
   vote: PropTypes.func.isRequired,
   votedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   sessionStarted: PropTypes.bool.isRequired,

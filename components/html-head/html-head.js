@@ -19,7 +19,7 @@ export default function HtmlHead({ title }) {
       <meta name="description" content="Scrum Poker Cards application. Scrum poker online for remote sprint plannings." />
       <meta name="keywords" content="scrum poker, planning poker, scrum poker online, scrum poker cards, scrum, agile, sprint planning, remote sprint planning" />
       <meta name="author" content="Xavier Canchal" />
-      <script data-ad-client="ca-pub-8058549971429775" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+      {/* <script data-ad-client="ca-pub-8058549971429775" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" /> */}
     </Head>
   );
 }
