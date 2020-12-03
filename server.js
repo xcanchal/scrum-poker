@@ -12,7 +12,7 @@ const allowedOrigins = ['https://the-scrum-poker.online', 'https://www.the-scrum
 const handleCors = (req, callback) => {
   callback(null, {
     methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH'],
-    origin: process.env.NODE_ENV !== 'production' || allowedOrigins.includes(req.origin),
+    origin: process.env.NODE_ENV !== 'production' || allowedOrigins.includes(req.header('Origin')),
   });
 };
 
