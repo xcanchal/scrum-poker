@@ -8,18 +8,15 @@ const registerSubscriptions = require('./lib/subscriptions');
 
 const port = process.env.PORT || 3000;
 
-const allowedOrigins = ['https://the-scrum-poker.online', 'https://www.the-scrum-poker.online'];
-const handleCors = (req, callback) => {
-  callback(null, {
-    methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH'],
-    origin: process.env.NODE_ENV !== 'production' || allowedOrigins.includes(req.header('Origin')),
-  });
-};
-
 (async () => {
   const app = express();
   const server = http.Server(app);
-  const io = socketIo(server, { cors: handleCors });
+
+  const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ['https://the-scrum-poker.online', 'https://www.the-scrum-poker.online']
+    : '*';
+
+  const io = socketIo(server, { cors: { origin: allowedOrigins } });
   io.on('connection', (socket) => {
     registerSubscriptions(socket);
   });
