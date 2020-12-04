@@ -16,6 +16,8 @@ plugins:
 
 globals:
   fetch: true
+  window: true
+  alert: true
 
 rules:
   react/react-in-jsx-scope: 'off'

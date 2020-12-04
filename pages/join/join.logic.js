@@ -12,6 +12,7 @@ import HtmlHead from '../../components/html-head';
 import StyledInput from '../../components/input';
 import StyledButton from '../../components/button';
 import { useSocket } from '../../context/socket';
+import { useEnterKey } from '../../hooks';
 
 const Join = ({ className }) => {
   const router = useRouter();
@@ -36,6 +37,8 @@ const Join = ({ className }) => {
       socket.emit('joinRoom', { id: roomId, guestName });
     }
   }, [socket, router, guestName, isValidGuestName]);
+
+  useEnterKey(joinRoom);
 
   const onJoinedRoom = useCallback((joinedRoom) => {
     dispatch(setRoom(joinedRoom));

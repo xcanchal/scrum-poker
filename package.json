@@ -2,7 +2,7 @@
   "name": "scrum-poker-next",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon --watch lib server.js",
     "build": "next build",
     "prestart": "npm run build",
     "start": "NODE_ENV=production node server.js",
