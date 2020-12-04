@@ -6,18 +6,18 @@ const Input = ({
   placeholder,
   value,
   onChange,
-  id,
   className,
   maxLength,
+  size,
 }) => (
   <input
-    {...(id ? { id } : {})}
     className={`${className}`}
     type={type}
     placeholder={placeholder}
     onChange={onChange}
     value={value}
     maxLength={maxLength}
+    size={size}
   />
 );
 
@@ -26,9 +26,9 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  id: PropTypes.string,
   className: PropTypes.string,
   maxLength: PropTypes.number,
+  size: PropTypes.oneOf(['md', 'lg']),
 };
 
 Input.defaultProps = {

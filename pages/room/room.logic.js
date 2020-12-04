@@ -38,6 +38,14 @@ export default function Room({ className }) {
     dispatch(setRoom(updatedRoom));
   }, [dispatch, sessionStarted]);
 
+  const onGuestKickedOut = useCallback(({ guestId, room: updatedRoom }) => {
+    if (socket && socket.id === guestId) {
+      router.replace('/kicked-out');
+      return;
+    }
+    updateRoom(updatedRoom);
+  }, [router, socket, updateRoom]);
+
   const onVoted = useCallback((updatedRoom) => {
     if (updatedRoom.guests.every(({ vote }) => !!vote)) {
       setGuestsVoted(true);
@@ -64,12 +72,12 @@ export default function Room({ className }) {
       socket.on('voted', onVoted);
       socket.on('votesCleared', onVotesCleared);
       socket.on('sessionStarted', () => setSessionStarted(true));
-      socket.on('guestKickedOut', updateRoom);
+      socket.on('guestKickedOut', onGuestKickedOut);
       setListenersReady(true);
     }
   }, [
     socket, onVoted, onVotesCleared, kickGuestOut,
-    listenersReady, onGuestJoin, updateRoom,
+    listenersReady, onGuestJoin, updateRoom, onGuestKickedOut,
   ]);
 
   const vote = useCallback((value) => {
@@ -143,6 +151,7 @@ export default function Room({ className }) {
       <Layout>
         <HtmlHead title="Scrum poker - Room" />
         <div className="component-room__content">
+          <h1 className="component-room__title">{room.name}</h1>
           {ViewComponent}
         </div>
       </Layout>

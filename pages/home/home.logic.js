@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 import { useSocket } from '../../context/socket';
 import { useGlobalState } from '../../context/global-state';
+import { useEnterKey } from '../../hooks';
 import { setRoom, updateRoom } from '../../reducer/actions';
 import Layout from '../../components/layout';
 import HtmlHead from '../../components/html-head';
@@ -33,6 +34,8 @@ const Home = ({ className }) => {
       socket.emit('createRoom', room);
     }
   }, [socket, room, canCreateRoom]);
+
+  useEnterKey(createRoom);
 
   const onRoomCreated = useCallback((createdRoom) => {
     dispatch(setRoom(createdRoom));
