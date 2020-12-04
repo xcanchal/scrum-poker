@@ -8,8 +8,15 @@ const Select = ({
   onChange,
   value,
   children: Options,
+  size,
 }) => (
-  <select id={id} className={className} onChange={onChange} value={value}>
+  <select
+    id={id}
+    className={className}
+    onChange={onChange}
+    value={value}
+    size={size}
+  >
     {Options}
   </select>
 );
@@ -19,6 +26,7 @@ Select.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func,
   value: PropTypes.string,
+  size: PropTypes.oneOf(['md', 'lg']),
   children: (props, propName) => {
     const { [propName]: prop } = props;
     const children = React.Children.toArray(prop);

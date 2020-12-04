@@ -151,6 +151,7 @@ export default function Room({ className }) {
       <Layout>
         <HtmlHead title="Scrum poker - Room" />
         <div className="component-room__content">
+          <h1 className="component-room__title">{room.name}</h1>
           {ViewComponent}
         </div>
       </Layout>

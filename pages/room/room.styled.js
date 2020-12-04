@@ -5,10 +5,14 @@ const roomStyles = () => css`
   align-items: center;
   justify-content: center;
 
+  .component-room__title {
+    display: flex;
+  }
+
   .component-room__content {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     max-width: 780px;
     text-align: center;
 

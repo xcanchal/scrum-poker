@@ -5,10 +5,13 @@ import { StyledCardList, StyledCardListItem } from '../card-list';
 import cards from '../../constants/cards';
 
 const GuestView = ({
-  className, room, vote, votedValue, sessionStarted,
+  className,
+  room, vote,
+  votedValue,
+  sessionStarted,
+
 }) => (
   <div className={`component-guest-view ${className}`}>
-    <h2>{room.name}</h2>
     {sessionStarted ? (
       <StyledCardList>
         {cards[room.cardsMode].map((value) => (

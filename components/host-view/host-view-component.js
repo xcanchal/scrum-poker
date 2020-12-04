@@ -36,7 +36,6 @@ const HostView = ({
 
   return (
     <div className={`${className} component-host-view`}>
-      <h2>{room.name}</h2>
       {isHost && (
         <p>
           Hi
