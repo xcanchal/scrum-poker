@@ -21,4 +21,11 @@ export default styled(Join)`
     margin-bottom: 16px;
     display: flex;
   }
+
+  @media (max-width: 679px) {
+    .component-join__content {
+      width: 100%;
+      padding: 0 5%;
+    }
+  }
 `;

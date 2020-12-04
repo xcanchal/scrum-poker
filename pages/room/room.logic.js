@@ -38,23 +38,23 @@ export default function Room({ className }) {
     dispatch(setRoom(updatedRoom));
   }, [dispatch, sessionStarted]);
 
-  const onGuestKickedOut = useCallback(({ guestId, room: updatedRoom }) => {
-    if (socket && socket.id === guestId) {
-      router.replace('/kicked-out');
-      return;
-    }
-    updateRoom(updatedRoom);
-  }, [router, socket, updateRoom]);
-
-  const onVoted = useCallback((updatedRoom) => {
+  const updateGuestsVoted = useCallback((updatedRoom) => {
     if (updatedRoom.guests.every(({ vote }) => !!vote)) {
       setGuestsVoted(true);
     }
+  }, []);
+
+  const updateHostVoted = useCallback((updatedRoom) => {
     if (updatedRoom.host.vote) {
       setHostVoted(true);
     }
+  }, []);
+
+  const onVoted = useCallback((updatedRoom) => {
+    updateGuestsVoted(updatedRoom);
+    updateHostVoted(updatedRoom);
     dispatch(setRoom(updatedRoom));
-  }, [dispatch]);
+  }, [dispatch, updateGuestsVoted, updateHostVoted]);
 
   const onVotesCleared = useCallback((updatedRoom) => {
     setGuestsVoted(false);
@@ -62,6 +62,16 @@ export default function Room({ className }) {
     setVotedValue(null);
     dispatch(setRoom(updatedRoom));
   }, [dispatch]);
+
+  const onGuestKickedOut = useCallback(({ guestId, room: updatedRoom }) => {
+    if (socket && socket.id === guestId) {
+      router.replace('/kicked-out');
+      return;
+    }
+    updateGuestsVoted(updatedRoom);
+    updateHostVoted(updatedRoom);
+    updateRoom(updatedRoom);
+  }, [router, socket, updateRoom, updateGuestsVoted, updateHostVoted]);
 
   const addListeners = useCallback(() => {
     if (socket && !listenersReady) {
