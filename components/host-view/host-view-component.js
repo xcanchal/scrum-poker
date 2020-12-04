@@ -17,22 +17,19 @@ const HostView = ({
 }) => {
   const socket = useSocket();
   const inviteLink = `${process.env.NEXT_PUBLIC_HOST}/join?id=${room.id}`;
-  const allVoted = guestsVoted && hostVoted;
 
   const guestVoted = useCallback((guestId) => {
     const { vote = null } = room.guests.find(({ id }) => id === guestId);
     return vote;
   }, [room.guests]);
 
-  const kickGuestOut = useCallback((guestId) => {
-    socket.emit('kickGuestOut', { roomId: room.id, guestId });
-  }, [socket, room]);
-
-  const onGuestRemovalClick = useCallback(({ id, name }) => {
+  const onKickGuestOut = useCallback(({ id, name }) => {
     if (window.confirm(`Do you really want to kick "${name}" out?`)) {
-      kickGuestOut(id);
+      socket.emit('kickGuestOut', { roomId: room.id, guestId: id });
     }
-  }, [kickGuestOut]);
+  }, [socket, room.id]);
+
+  const allVoted = guestsVoted && hostVoted;
 
   return (
     <div className={`${className} component-host-view`}>
@@ -69,10 +66,10 @@ const HostView = ({
               </StyledCardListItem>
               <button
                 className="kick-guest-button"
-                onClick={() => onGuestRemovalClick({ id, name })}
+                onClick={() => onKickGuestOut({ id, name })}
                 type="button"
               >
-                x
+                +
               </button>
               <span>{name}</span>
             </div>

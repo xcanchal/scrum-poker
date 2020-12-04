@@ -20,7 +20,11 @@ export default styled(HostView)`
 
     &:hover {
       .kick-guest-button {
-        display: block;
+        display: flex;
+
+        &:hover, &:active {
+          background-color: #ccc;
+        }
       }
     }
   }
@@ -30,16 +34,21 @@ export default styled(HostView)`
   }
 
   .kick-guest-button {
-    cursor: pointer;
     display: none;
+    transform: rotate(45deg);
+    font-size: 20px;
     position: absolute;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 0;
     top: 0;
     right: 0;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     background: #ddd;
-    font-family: helvetica;
     border-radius: 10px;
     border: none;
+    border-radius: 100%;
   }
 `;
