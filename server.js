@@ -10,16 +10,13 @@ const port = process.env.PORT || 3000;
 
 (async () => {
   const app = express();
-  app.use(cors());
-
   const server = http.Server(app);
 
-  const io = socketIo(server, {
-    cors: {
-      origin: process.env.NODE_ENV === 'production' ? 'https://www.the-scrum-poker.online' : '*',
-      methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH'],
-    },
-  });
+  const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ['https://the-scrum-poker.online', 'https://www.the-scrum-poker.online']
+    : '*';
+
+  const io = socketIo(server, { cors: { origin: allowedOrigins } });
   io.on('connection', (socket) => {
     registerSubscriptions(socket);
   });
