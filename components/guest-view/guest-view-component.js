@@ -9,7 +9,6 @@ const GuestView = ({
   room, vote,
   votedValue,
   sessionStarted,
-
 }) => (
   <div className={`component-guest-view ${className}`}>
     {sessionStarted ? (
