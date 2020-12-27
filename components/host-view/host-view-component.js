@@ -64,19 +64,21 @@ const HostView = ({
               >
                 <span>{allVoted ? vote : '?'}</span>
               </StyledCardListItem>
-              <button
-                className="kick-guest-button"
-                onClick={() => onKickGuestOut({ id, name })}
-                type="button"
-              >
-                +
-              </button>
+              {isHost ? (
+                <button
+                  className="kick-guest-button"
+                  onClick={() => onKickGuestOut({ id, name })}
+                  type="button"
+                >
+                  +
+                </button>
+              ) : null}
               <span>{name}</span>
             </div>
           ))}
         </StyledCardList>
       </div>
-      {!sessionStarted && !!room.guests.length && (
+      {(isHost && !sessionStarted && !!room.guests.length) && (
         <Button
           onClick={startSession}
           className="component-host-view__button component-host-view__button--start"
